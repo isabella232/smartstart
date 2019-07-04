@@ -1,0 +1,162 @@
+@import 'variables';
+
+.sharing-wrapper {
+  position: fixed;
+  bottom: 0;
+  z-index: $z-index-sharing-pane;
+  background-color: #cdcdcd;
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+
+  @media #{$custom-sharing-pane-to-side} {
+  // buttons show to the right on tablet and above
+    max-width: 62px;
+    right: 30px;
+    background-color: transparent;
+    display: block;
+    top: 180px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .social-media-wrapper {
+    display: flex;
+    min-width: 60%;
+    align-items: center;
+    justify-content: space-around;
+
+    @media #{$custom-sharing-pane-to-side} {
+      display: block;
+      max-width: 100%;
+    }
+  }
+
+  .media-button {
+    display: flex;
+    height: 37px;
+    width: 37px;
+    background-color: $background-color;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+
+    &::before {
+      font-family: 'icomoon' !important;
+      display: block;
+    }
+
+    &::after {
+      display: none;
+    }
+
+    &:hover {
+      background-color: darken($background-color, 10%);
+    }
+
+    @media #{$custom-sharing-pane-to-side} {
+      height: 60px;
+      width: 60px;
+      border: #dcdcdc 2px solid;
+      margin-top: 15px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+
+  .facebook {
+    &::before {
+      content: $icon-facebook-f;
+      font-size: 22px;
+      color: $facebook-color;
+
+      @media #{$custom-sharing-pane-to-side} {
+        font-size: 30px;
+      }
+    }
+  }
+
+  .twitter {
+    &::before {
+      content: $icon-twitter;
+      font-size: 23px;
+      color: $twitter-color;
+
+      @media #{$custom-sharing-pane-to-side} {
+        font-size: 30px;
+      }
+    }
+  }
+
+  .email {
+    &::before {
+      content: $icon-envelope;
+      font-size: 18px;
+      color: $envelope-color;
+
+      @media #{$custom-sharing-pane-to-side} {
+        font-size: 25px;
+      }
+    }
+  }
+
+  .feedback-button {
+    min-height: 100%;
+    width: 40%;
+    display: inline-block;
+    background-color: $muted-blue;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    padding: 16px;
+
+    &::after {
+      font-family: 'icomoon' !important;
+      content: $icon-external-link;
+      display: inline-block;
+      font-size: 0.6em;
+      position: relative;
+      width: 0.6em;
+      right: -0.6em;
+      top: -0.05em;
+    }
+
+    &:hover {
+      background-color: darken($muted-blue, 10%);
+    }
+
+    .feedback-long {
+      display: none;
+    }
+
+    .feedback-short {
+      display: inline-block;
+    }
+
+    @media #{$custom-sharing-pane-to-side} {
+      min-height: 62px;
+      min-width: 260px;
+      border-radius: 4px;
+      transform: translate(-38%, 200%) rotate(-90deg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+
+      .feedback-long {
+        display: inline-block;
+      }
+
+      .feedback-short {
+        display: none;
+      }
+
+      &::before {
+        display: block;
+      }
+    }
+  }
+}

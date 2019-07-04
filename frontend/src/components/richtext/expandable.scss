@@ -1,0 +1,169 @@
+@import 'variables';
+
+.expandable {
+
+  > .content {
+    padding: $card-padding;
+    display: none;
+
+    @media print {
+      display: block;
+      padding: 10px 0 0;
+    }
+  }
+
+  // pull them to the right of the card
+  &.richtext {
+    margin: 25px -#{$card-padding} 25px 20px;
+
+    @media #{$desktop-and-above} {
+      margin: 25px -#{$card-padding-desktop} 25px 20px;
+    }
+
+    @media print {
+      margin-left: 0;
+    }
+
+    + .richtext.expandable {
+      margin-top: -10px;
+    }
+  }
+
+  .expandable-title-wrapper {
+    // this otherwise useless container is needed because of https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+    display: flex;
+    width: 100%;
+  }
+
+  .expandable-title {
+    font-family: $font-family-base;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    background-color: $card-accordion-color;
+    color: $link-color;
+    margin: 0; // margin has to be set on .expandable due to IE11 issue
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
+    padding: 8px 60px 8px 5px;
+    width: 100%;
+    min-height: 60px;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+
+    @media print {
+      background-color: $print-background-color;
+      color: $print-text-color;
+      border-bottom: 0 none;
+      padding-bottom: 0;
+      padding-left: 0;
+      display: block;
+    }
+
+    &:hover {
+      color: #fff;
+      background-color: $card-accordion-open-color;
+
+      &::before {
+        background-color: $card-accordion-open-color;
+      }
+    }
+
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      width: $left-side-curve-width;
+      height: 100%;
+      background-color: $card-accordion-color;
+      border-top-left-radius: 50%;
+      border-bottom-left-radius: 50%;
+      left: -($left-side-curve-width / 2);
+      bottom: 0;
+      z-index: -1;
+
+      @media print {
+        display: none;
+      }
+    }
+
+    &::after {
+      font-family: 'icomoon' !important;
+      content: $icon-accordian-open;
+      font-size: 20px;
+      line-height: 20px;
+      display: inline-block;
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      margin-top: -10px; // half of icon height
+      transition: transform 0.2s ease;
+
+      @media print {
+        display: none;
+      }
+    }
+  }
+
+  &.is-expanded {
+    margin-bottom: 75px;
+
+    > .expandable-title-wrapper > .expandable-title {
+      color: #fff;
+      background-color: $card-accordion-open-color;
+      margin-bottom: 0;
+
+      &::before {
+        background-color: $card-accordion-open-color;
+      }
+
+      &::after {
+        transform: rotate(45deg);
+        transition: transform 0.2s ease;
+      }
+    }
+
+    // remove inner top and bottom margins from any expandable content areas
+    .content > :first-child {
+      margin-top: 0;
+    }
+    .content > :last-child {
+      margin-bottom: 0;
+    }
+
+    > .content {
+      display: block;
+      background-color: $card-accordion-color;
+      position: relative;
+      margin-bottom: 60px;
+      z-index: 0;
+
+      &::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 60px;
+        background-color: $card-accordion-color;
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
+        position: absolute;
+        left: 0;
+        bottom: -30px;
+        z-index: -1;
+
+        @media #{$desktop-and-above} {
+          height: 96px;
+          bottom: -48px;
+        }
+      }
+
+      @media #{$desktop-and-above} {
+        padding: $card-padding-desktop;
+      }
+    }
+  }
+}

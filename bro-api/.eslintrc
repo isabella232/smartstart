@@ -1,0 +1,34 @@
+{
+  "extends": "loopback",
+  "rules": {
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "padded-blocks": [
+      "off"
+    ],
+    "max-len": [
+      "error",
+      { "code": 160 }
+    ],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
+    "prefer-arrow-callback": [
+      "error"
+    ],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true,
+        "allowTemplateLiterals": true
+      }
+    ]
+  },
+  "env": {
+    "jest": true
+  }
+}

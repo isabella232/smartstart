@@ -1,0 +1,25 @@
+@import 'variables';
+
+.supplementary {
+  background-color: $supplementary-background-color;
+  padding-bottom: $footer-top-spacing-mobile;
+  margin-bottom: -#{$footer-top-spacing-mobile + $footer-curve-height};
+
+  > p {
+    @media #{$desktop-and-above} {
+      padding-bottom: 27px;
+      max-width: $phase-content-width-desktop;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media #{$desktop-and-above} {
+    padding-bottom: $footer-top-spacing-desktop;
+    margin-bottom: -#{$footer-top-spacing-desktop + $footer-curve-height};
+  }
+
+  @media print {
+    background-color: $print-background-color;
+  }
+}

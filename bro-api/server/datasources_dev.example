@@ -1,0 +1,11 @@
+{
+  "db": {
+    "name": "db",
+    "host": "bro-db",
+    "port": 5432,
+    "database": "dev-bro",
+    "password": "bro-api",
+    "user": "devuser-bro",
+    "connector": "postgresql"
+  }
+}

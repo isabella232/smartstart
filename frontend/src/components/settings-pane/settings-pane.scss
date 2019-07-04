@@ -1,0 +1,260 @@
+@import 'variables';
+
+// Note: we have to avoid position absolute so we can force the height to be the
+// minimun required, becuase pointer events doesn't work on some mobile devices.
+// Instead, we display: inline-block and text-align: right
+
+.settings {
+  max-width: $desktop-max-content-width;
+  margin-left: auto;
+  margin-right: auto;
+  height: 0; // otherwise pushes all content down. rely on overflow being visible
+  text-align: right; // push everything to the right without using float
+}
+
+.settings-pane-wrapper {
+  max-width: 585px;
+  padding-right: 15px; // leave space at edges on mobile
+  padding-left: 15px;
+  padding-bottom: 7px; // allow space for dropshadow
+  display: inline-block;
+
+  @media print {
+    display: none;
+  }
+
+  &.is-fixed {
+    position: fixed;
+    z-index: $z-index-settings-pane-fixed;
+    top: 0;
+    right: 0;
+    padding-bottom: 50px; // allow space for pane open curved bottoms
+
+    // need to be able to scroll to see too-tall content
+    max-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; // otherwise older safari barfs
+
+    @media only screen and (min-width: #{$desktop-max-content-width}) {
+      right: calc((100vw - #{$desktop-max-content-width}) / 2);
+    }
+
+    .settings-pane {
+      box-shadow: $header-subtle-dropshadow;
+    }
+
+    .settings-triggers {
+      box-shadow: #{$settings-triggers-dropshadow};
+    }
+  }
+}
+
+.settings-triggers {
+  position: relative;
+  display: inline-flex;
+  z-index: $z-index-settings-trigger;
+  border-radius: 0 0 5px 5px;
+  background-color: $background-color;
+  transition: background-color 0.5s, border-bottom-right-radius 0.5s;
+
+  .settings-trigger {
+    padding: 12px 12px 10px;
+    border: 0 none;
+    border-radius: 0;
+    font-weight: normal;
+    position: relative;
+    border-right: 1px solid $border-color;
+    transition: color 0.5s;
+    background-color: transparent;
+
+    // hide the text normally
+    font-size: 0px;
+    height: 44px;
+    min-width: 44px;
+
+    @media #{$tablet-and-above} {
+      // show the text on tablet and above
+      font-size: $font-size-base;
+      line-height: 1.2;
+      padding: 12px 12px 10px 36px;
+    }
+
+    &.settings-trigger-my-profile,
+    &.settings-trigger-todo-list {
+      &::before {
+        font-family: 'icomoon' !important;
+        font-size: $font-size-base;
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: 13px;
+        top: 12px;
+        line-height: 1.4;
+      }
+    }
+
+    &.settings-trigger-my-profile::before {
+      content: $icon-profile;
+    }
+
+    &:last-child {
+      border-right: 0 none;
+    }
+
+    &.settings-trigger-todo-list::before {
+      content: $icon-todo;
+    }
+
+    &.settings-trigger-go-to-stage {
+      display: inline-block;
+      font-size: $font-size-base;
+      line-height: 1.2;
+      padding: 12px 12px 10px 12px;
+
+      @media #{$desktop-and-above} {
+        display: none;
+      }
+    }
+  }
+
+  &.pane-open {
+    border-bottom-right-radius: 0;
+    background-color: transparent;
+
+    .is-fixed & {
+      box-shadow: none;
+    }
+
+    .settings-trigger {
+      color: $settings-elements-color;
+      background-color: $settings-elements-bg-color;
+      border-right: 1px solid darken($settings-elements-color, 10%);
+
+      &:last-child {
+        border-right: 0 none;
+      }
+
+      &:first-child {
+        border-bottom-left-radius: 5px;
+      }
+
+      &:hover,
+      &:active,
+      &.is-open {
+        color: #ffffff;
+        background-color: transparent;
+      }
+    }
+
+  }
+}
+
+.settings-pane {
+  position: relative;
+  color: $background-color;
+  background-color: $realme-dark-blue;
+  padding: $card-padding-desktop;
+  padding-top: $card-padding-desktop * 2;
+  display: none;
+  text-align: left; // correct for the text-align right
+
+  &.is-open {
+    z-index: $z-index-settings-pane-open;
+    display: inline-block; // relies on their being a br in the HTML
+    margin-top: -44px; // same as fixed height of trigger buttons
+    max-width: 555px;
+  }
+
+  // curved bottom
+  &::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 60px;
+    background-color: $realme-dark-blue;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    position: absolute;
+    left: 0;
+    bottom: -30px;
+    z-index: -1;
+
+    @media #{$desktop-and-above} {
+      height: 96px;
+      bottom: -48px;
+    }
+  }
+
+  > h4:first-child {
+    margin-top: 0;
+  }
+
+  a {
+    color: $background-color;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: $background-color;
+    }
+  }
+
+  input {
+    background-color: $settings-elements-bg-color;
+    color: $background-color;
+
+    &::placeholder {
+      color: #C5CACE;
+    }
+
+    &::selection {
+      background: $realme-dark-blue;
+    }
+  }
+
+  .button-set {
+    border-top-color: $settings-border-color;
+
+    .button,
+    button {
+      background-color: $background-color;
+      border-color: $background-color;
+      color: $realme-dark-blue;
+
+      &:active,
+      &:hover {
+        background-color: $background-color;
+        border-color: $background-color;
+        color: $realme-dark-blue;
+      }
+    }
+
+    .reset-button,
+    .reset-button:active,
+    .reset-button:hover {
+      position: absolute;
+      left: 0;
+      padding-left: 0;
+      padding-right: 0;
+      border-color: transparent;
+      background-color: transparent;
+      color: $background-color;
+    }
+
+    // iPhone 5 needs to have an extra row - make space for reset via padding
+    @media #{$extra-small-devices} {
+      padding-top: 60px;
+
+      .reset-button {
+        top: 0;
+      }
+    }
+
+    .cancel-button,
+    .cancel-button:active,
+    .cancel-button:hover {
+      background-color: transparent;
+      color: $background-color;
+    }
+  }
+}

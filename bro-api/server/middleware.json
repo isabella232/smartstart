@@ -1,0 +1,67 @@
+{
+  "initial:before": {
+    "loopback#favicon": {}
+  },
+  "initial": {
+    "compression": {},
+    "cors": {
+      "paths": [
+        "/birth-registration-api/Births/birth-registrations/:correlationId/payments/:state"
+      ],
+      "params": {
+        "origin": true,
+        "credentials": false,
+        "maxAge": 86400
+      }
+    },
+    "helmet#xssFilter": {},
+    "helmet#frameguard": {
+      "params": [
+        "deny"
+      ]
+    },
+    "helmet#hsts": {
+      "params": {
+        "maxAge": 0,
+        "includeSubdomains": true
+      }
+    },
+    "helmet#hidePoweredBy": {},
+    "helmet#ieNoOpen": {},
+    "helmet#noSniff": {},
+    "helmet#noCache": {
+      "enabled": false
+    }
+  },
+  "session": {
+    "body-parser#json": {},
+    "cookie-parser": {}
+  },
+  "auth": {},
+  "parse": {},
+  "routes": {
+    "loopback#rest": {
+      "paths": [
+        "${restApiRoot}"
+      ]
+    }
+  },
+  "files": {},
+  "final": {
+    "loopback#urlNotFound": {}
+  },
+  "final:after": {
+    "./middleware/log-error": {},
+    "raven#errorHandler": {},
+    "strong-error-handler": {
+      "params": {
+        "safeFields": [
+          "status",
+          "duplicate",
+          "errors"
+        ],
+        "log": false
+      }
+    }
+  }
+}

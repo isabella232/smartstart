@@ -1,0 +1,33 @@
+@import 'variables';
+
+.task {
+  position: relative;
+
+  .task + & {
+    margin-top: -5px;
+  }
+
+  &.subtask {
+    margin-left: 30px;
+  }
+
+  label {
+    font-weight: 400;
+    font-size: $font-size-base;
+    padding-left: 30px;
+    margin: 0;
+    display: inline-block;
+
+    &.checked {
+      text-decoration: line-through;
+      color: $settings-elements-color;
+    }
+  }
+
+  input {
+    margin: 0;
+    position: absolute;
+    left: 0;
+    top: 5px;
+  }
+}

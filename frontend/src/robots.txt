@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.smartstart.serivces.govt.nz/sitemap.xml

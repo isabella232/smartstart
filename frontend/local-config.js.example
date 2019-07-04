@@ -1,0 +1,10 @@
+var config = {
+  endpoint: 'https://www.govt.nz/BoacAPI/v1/all',   // URL to timeline content API
+  piwik_instance: '',                               // URL to Piwik
+  piwik: null,                                      // Piwik site ID
+  google_api_key: '',                               // API key to use for Google Maps/Places
+  entitlements_api: '',                             // URL to Openfisca (entitlements) project
+  myir_enabled: false,                              // when true, myir tab is enabled on bro form
+}
+
+module.exports = config

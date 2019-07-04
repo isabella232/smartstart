@@ -1,0 +1,45 @@
+{
+    "extends": "standard",
+    "plugins": [
+        "react",
+        "standard",
+        "promise"
+    ],
+    "env": {
+        "jest": true,
+        "es6": true,
+        "browser": true
+    },
+    "parser": "babel-eslint",
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "globals": {
+      "jasmine": true,
+      "fetch": true,
+      "process": true,
+      "URLSearchParams": true,
+      "API_ENDPOINT": true,
+      "PIWIK_INSTANCE": true,
+      "PIWIK_SITE": true,
+      "GOOGLE_API_KEY": true,
+      "ENTITLEMENTS_API": true,
+      "MYIR_ENABLED": true,
+      "MYIR_ENDPOINT": true
+    },
+    "rules": {
+      "no-class-assign": "off",
+      "react/no-unescaped-entities": "off",
+      "react/no-find-dom-node": "off",
+      "react/prop-types": "off",
+      "no-useless-escape": "warn",
+      "react/jsx-key": "warn",
+      "react/no-deprecated": "warn"
+    },
+    "settings": {
+      "react": {
+        "version": "16.6"
+      }
+    }
+}

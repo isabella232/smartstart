@@ -1,0 +1,38 @@
+@import 'variables';
+
+.page-content .landing-page {
+  h2 {
+    padding: 0;
+  }
+
+  h5 {
+    margin: 30px 0;
+  }
+
+  .form-actions-wrapper {
+    display: inline-block;
+    text-align: center;
+  }
+
+  .welcome-action {
+    color: $welcome-button-color;
+    font-weight: 500;
+    text-decoration: none;
+    background-color: $welcome-button-bg-color;
+    padding: 7px 30px 7px 30px;
+    border-radius: 18px;
+    position: relative;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+
+    &:hover {
+      background-color: $welcome-button-bg-color-hover;
+    }
+
+    @media #{$desktop-and-above} {
+      width: 300px;
+    }
+  }
+}

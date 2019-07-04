@@ -1,0 +1,21 @@
+@import 'variables';
+
+.app-error {
+  padding: 0 20px;
+  text-align: center;
+  margin: 40px auto;
+
+  h4 {
+    border: 2px solid $accent-color;
+    border-radius: $default-border-radius;
+    padding: 40px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  @media #{$desktop-and-above} {
+    max-width: $desktop-max-content-width;
+    padding: 0 $indent;
+    margin-top: 80px;
+  }
+}

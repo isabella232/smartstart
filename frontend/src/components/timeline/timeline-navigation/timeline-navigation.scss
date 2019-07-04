@@ -1,0 +1,172 @@
+@import 'variables';
+
+  .timeline-navigation {
+    display: none;
+
+    // navigation displayed only on a desktop
+    @media #{$desktop-and-above} {
+      display: flex;
+      position: absolute;
+      z-index: 1;
+      background-color: $background-color;
+      padding-right: 10px;
+      min-width: 250px;
+      border: 1px solid $text-shade-color;
+      border-radius: 0 25px 25px 0;
+
+      &.is-fixed {
+        position: fixed;
+        top: 160px;
+      }
+
+      &.top {
+        top: 360px;
+
+      }
+      &.end-reached {
+        bottom: 0;
+      }
+
+      ul {
+        list-style-type: none;
+        position: relative;
+        line-height: 48px;
+
+        // vertical line
+        &::before {
+          content: "";
+          display: inline-block;
+          position: absolute;
+          background-color: $text-shade-color;
+          width: 2px;
+          height: 100%;
+          top: 0;
+          right: 10px; // half circle
+        }
+
+        .nav-phase-category {
+
+          a.nav-phase-title {
+            display: inline-block;
+            width: 100%;
+            color: black;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 500;
+
+            // dash on timeline
+            &::before {
+              content: "";
+              display: inline-block;
+              position: absolute;
+              width: 10px;
+              height: 2px;
+              right: 6px;
+              top: 18px;
+              background-color: $text-shade-color;
+            }
+          }
+        }
+
+        // hide top bit of timeline
+        li:first-child.nav-phase-category > a:first-child::after {
+          content: "";
+          display: inline-block;
+          position: absolute;
+          width: 2px;
+          height: 18px;
+          right: 10px;
+          top: 0;
+          background-color: $background-color;
+        }
+
+        .nav-phase-item {
+
+          a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: $text-color;
+            text-decoration: none;
+            font-size: $font-size-base;
+
+            // circle
+            .nav-phase-dot {
+              display: inline-block;
+              margin-left: 10px;
+              border: 1px solid $link-color;
+              background-color: $background-color;
+              border-radius: 50%;
+              width: 20px;
+              height: 20px;
+            }
+          }
+
+          &.active {
+            .nav-phase-dot {
+              background-color: $link-color;
+            }
+          }
+        }
+
+        li.back-to-top {
+          position: relative;
+          display: inline-block;
+          width: 100%;
+          padding: 20px 10px 0 0;
+          text-align: right;
+
+          &::before {
+            content: "";
+            display: inline-block;
+            position: absolute;
+            width: 10px;
+            height: 2px;
+            right: 6px;
+            bottom: 20px;
+            background-color: $text-shade-color;
+          }
+
+          &::after {
+            content: "";
+            display: inline-block;
+            position: absolute;
+            width: 12px;
+            height: 25px;
+            right: 10px;
+            bottom: -5px;
+            background-color: $background-color;
+
+          }
+
+          a {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            padding-right: 40px;
+            text-decoration: none;
+            color: $text-color;
+
+            &:hover {
+              text-decoration: underline;
+            }
+
+            &::after {
+              content: $icon-arrow;
+              font-family: 'icomoon' !important;
+              font-size: 14px;
+              position: absolute;
+              bottom: 0;
+              right: 20px;
+              transform: rotate(180deg);
+            }
+          }
+        }
+      }
+    }
+
+    // to prevent navigation overlay card on a small desktop
+    @media only screen and (max-width: 1252px) {
+        margin-left: -210px;
+    }
+  } // timeline-navigation

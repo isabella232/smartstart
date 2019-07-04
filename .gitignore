@@ -1,0 +1,33 @@
+
+frontend/node_modules
+ansible/roles/
+
+### Ansible ###
+*.retry
+.vault_password
+
+
+### Vim ###
+# swap
+.sw[a-p]
+.*.sw[a-p]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
+
+# Environments
+.env
+.venv
+p3-venv
+p2-venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+ansible-venv
+make_environment

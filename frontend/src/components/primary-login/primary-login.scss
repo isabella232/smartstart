@@ -1,0 +1,45 @@
+@import 'variables';
+
+.primary-login {
+
+  @media print {
+    display: none;
+  }
+
+  .concertina {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    padding-right: 22px;
+
+    &::after {
+      font-family: 'icomoon' !important;
+      font-size: 14px;
+      content: $icon-accordian-open;
+      display: inline-block;
+      position: absolute;
+      right: 0;
+      transition: transform 0.2s ease;
+
+      @media print {
+        display: none;
+      }
+    }
+
+    &.is-expanded {
+
+      &::after {
+        transform: rotate(45deg);
+        transition: transform 0.2s ease;
+      }
+    }
+  }
+
+  .concertina-content {
+    font-size: 14px;
+
+    *:first-child {
+      margin-top: 0;
+    }
+  }
+}

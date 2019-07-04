@@ -1,0 +1,113 @@
+@import 'variables';
+
+.support-header {
+  background-color: $support-header-background;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 40px;
+
+  @media #{$desktop-and-above} {
+    margin-bottom: 60px;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    bottom: 0;
+    background-image: url(/assets/img/header-reverse-curve-support.png);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+  }
+
+  .support-header-inner {
+    max-width: $desktop-max-content-width;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 15px;
+    background-size: 467px 350px;
+
+    p {
+      margin-bottom: 40px;
+    }
+
+    @media only screen and (min-width: #{$desktop-max-content-width}) {
+      padding: 15px 20px;
+    }
+
+    @media #{$desktop-and-above} {
+      margin-top: 40px;
+      padding-right: #{$indent * 2};
+      min-height: 350px;
+      background-image: url(/assets/img/illustrations/support-illustration-coloured.svg);
+      background-repeat: no-repeat;
+      background-position: right bottom;
+
+      h2 {
+        margin-top: 60px;
+      }
+    }
+
+    @media #{$high-res-desktop} {
+      background-image: url(/assets/img/illustrations/support-illustration-coloured.svg);
+      background-size: contain;
+    }
+  }
+}
+
+.support-page {
+
+  .site-container {
+    background-color: $support-content-background;
+    min-width: $mobile-min-content-width;
+
+    @media print {
+      background-color: $print-background-color;
+    }
+  }
+
+  .support-page-content {
+    padding-left: $card-padding;
+    padding-right: $card-padding;
+    min-width: $mobile-min-content-width;
+
+    @media #{$desktop-and-above} {
+      padding-left: $card-padding-desktop;
+      padding-right: $card-padding-desktop;
+      max-width: $phase-content-width-desktop;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    a,
+    button,
+    .button {
+      color: $text-color;
+      border-color: $text-color;
+
+      &:active {
+        color: $background-color;
+      }
+    }
+  }
+
+  .page-footer {
+    background-color: $support-content-background;
+  }
+
+  .back-to-main {
+    margin-bottom: 0;
+    padding-left: 0;
+  }
+
+  .introtext {
+    margin-bottom: 50px;
+  }
+
+  h5 {
+    margin-top: 35px;
+  }
+}

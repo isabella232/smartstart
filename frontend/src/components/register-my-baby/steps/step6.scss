@@ -1,0 +1,24 @@
+@import 'variables';
+
+.intro.myir {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .myir-logo {
+    padding: 10px 15px;
+    margin-right: 15px;
+    background-color: $ird-teal;
+  }
+}
+
+@media #{$desktop-and-above} {
+  .intro.myir {
+    flex-direction: row;
+  }
+
+  .form button.skip {
+      margin-left: auto;
+  }
+}

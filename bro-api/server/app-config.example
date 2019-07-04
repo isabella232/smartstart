@@ -1,0 +1,29 @@
+'use strict';
+
+const appConfig = {
+  domain: 'https://smartstart.services.govt.nz',
+  activeHash: 'hash',
+  pxPayKey: 'keyvalue',
+  pxPayUser: 'username',
+  pxPayEndpoint: 'https://example.com/',
+  pxPayTxnIdPrefix: 'yourenvname',
+  eServerEndpoint: 'https://example.com/',
+  eServerUser: 'user',
+  eServerPassword: 'password',
+  idHashSalt: 'example salt',
+  products: {
+    'ZBFP': 55,
+    'ZBBP': 55,
+    'ZBFD': 35,
+    'ZBBD': 35,
+    'ZBBC': 33,
+    'ZBPD': 35,
+    'ZBPP': 55
+  },
+  courierDelivery: 5,
+  myirUpstreamApi: 'https://example.com/',
+  myirSliceHeader: 'slice',
+  myirCertPath: '/etc/ssl/certs'
+};
+
+module.exports = appConfig;

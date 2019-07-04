@@ -1,0 +1,219 @@
+@import 'variables';
+
+.phase {
+  padding-top: 230px;
+  padding-bottom: 20px;
+  position: relative;
+  overflow-x: hidden;
+
+  @media #{$desktop-and-above} {
+    padding-top: 360px;
+  }
+
+  @media print {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+
+    @media #{$desktop-and-above} {
+      padding-bottom: 0;
+    }
+  }
+
+  // phase header shape
+  &::before,
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    background-color: $phase-background-color;
+
+    @media print {
+      display: none;
+    }
+  }
+
+  &::before {
+    width: 100%;
+    height: 156px;
+    top: 0;
+
+    @media #{$desktop-and-above} {
+      height: 230px;
+    }
+  }
+
+  // curved bottom
+  &::after {
+    width: 124%;
+    height: 76px;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    top: 95px;
+    left: -12%;
+
+    @media #{$desktop-and-above} {
+      height: 240px;
+      top: 38px;
+    }
+  }
+
+  > div > h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-left: $timeline-spacing + ($timeline-line-left-mobile / 2);
+    padding-right: $timeline-spacing - ($timeline-line-left-mobile / 2);
+    z-index: $z-index-phase-header-content;
+
+    @media #{$desktop-and-above} {
+      max-width: $phase-content-width-desktop;
+      padding-left: 0;
+      padding-right: 0;
+      padding-top: 10px; // create space between phase shape and text
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 40px;
+      position: relative; // on desktop, illustrations positioned to max-content width
+    }
+
+    @media print {
+      text-align: left;
+      padding-left: 15px;
+    }
+
+    &::before,
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 50%;
+
+      @media print {
+        display: none;
+      }
+    }
+
+    // white circle behind illustration (with dropshadow)
+    &::before {
+      border-radius: 50%;
+      background-color: #fff;
+      box-shadow: 0 0 18px 0 rgba(0,0,0,0.2);
+      width: 174px;
+      height: 174px;
+      margin-left: -87px + ($timeline-line-left-mobile / 2); // half of width plus offset by timeline width
+      top: 25px;
+      z-index: $z-index-phase-header-content;
+
+      @media #{$desktop-and-above} {
+        width: 290px;
+        height: 290px;
+        margin-left: -145px; // half of width
+        top: -305px;
+      }
+    }
+
+    // illustration
+    &::after {
+      width: 204px;
+      height: 204px;
+      margin-left: -102px + ($timeline-line-left-mobile / 2); // half of width plus offset by timeline width
+      top: 10px; // leave a bit of a gap at the top
+      z-index: $z-index-phase-header-content;
+
+      // illustration image gets set in the for loop further down
+      background-repeat: no-repeat;
+      background-size: contain;
+
+      @media #{$desktop-and-above} {
+        width: 340px;
+        height: 340px;
+        margin-left: -170px; // half of width
+        top: -330px;
+      }
+    }
+  }
+
+  // illustration image file for each phase
+  @for $i from 1 through 7 {
+    &.phase-#{$i} > div > h2::after {
+      background-image: url(/assets/img/illustrations/illustration-#{$i}.svg);
+    }
+  }
+
+  .back-to-top {
+    text-align: right;
+    margin-right: 20px;
+    padding-top: 40px;
+
+    @media #{$desktop-and-above} {
+      max-width: $phase-content-width-desktop;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    a {
+      position: relative;
+      padding-right: 22px;
+      font-size: 14px;
+      text-decoration: none;
+      color: $text-color;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &::after {
+        content: $icon-arrow;
+        font-family: 'icomoon' !important;
+        font-size: 14px;
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        top: 1px;
+        transform: rotate(180deg);
+      }
+    }
+
+    @media print {
+      display: none;
+    }
+  }
+}
+
+.phase-date {
+  position: relative;
+  font-family: $font-family-headers;
+  font-weight: 500;
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 20px;
+  padding-left: $timeline-spacing + ($timeline-line-left-mobile / 2);
+  padding-right: $timeline-spacing - ($timeline-line-left-mobile / 2);
+
+  @media #{$desktop-and-above} {
+    font-size: 28px;
+    margin-top: -10px;
+    margin-bottom: 40px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 2px;
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    background-color: $accent-color-dark;
+
+    @media #{$desktop-and-above} {
+      top: -10px;
+      left: calc(50% - 25px);
+    }
+  }
+}

@@ -1,0 +1,27 @@
+@import 'variables';
+
+.plain-layout-page {
+  overflow: hidden;
+
+  .page-content {
+    max-width: $desktop-max-content-width;
+    margin-left: auto;
+    margin-right: auto;
+    padding: $mobile-content-gutter;
+
+    @media only screen and (min-width: #{$desktop-max-content-width}) {
+      padding: 15px #{$indent * 2} 15px $desktop-content-gutter;
+    }
+  }
+
+  &.full-width .page-content {
+    @media only screen and (min-width: #{$desktop-max-content-width}) {
+      padding: 15px $desktop-content-gutter;
+    }
+  }
+
+  .divider {
+    border-bottom: 1px solid #d2d2d2;
+    margin-bottom: 30px;
+  }
+}

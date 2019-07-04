@@ -1,0 +1,227 @@
+// responsive breakpoints
+$extra-small-devices:  'only screen and (max-width: 390px)';
+$tablet-and-above:     'only screen and (min-width: 768px)';
+$tablet-only:          'only screen and (min-width: 768px) and (max-width: 991px)';
+$desktop-and-above:    'only screen and (min-width: 992px)';
+$high-res:             'only screen and (min-resolution: 2dppx)';
+$high-res-desktop:     'only screen and (min-width: 992px) and (min-resolution: 2dppx)';
+$custom-sharing-pane-to-side: 'only screen and (min-width: 1385px)'; // so sharing pane doesn't cover content
+$custom-sharing-pane-to-bottom: 'only screen and (max-width: 1385px)'; // so sharing pane doesn't cover footer
+
+// brand colors
+$realme-dark-blue:     #3e4d5d;
+$realme-middle-blue:   #125da3;
+$muted-blue:           #65717D;
+$accent-color-dark:    #66b3aa;
+$accent-color:         #c1e0dd;
+$accent-color-light:   #d1e8e5;
+
+// base colors
+$background-color:     #ffffff;
+$text-color:           #4f4b46;
+$text-shade-color:     #777777;
+$link-color:           #285a9b;
+$link-color-hover:     $realme-dark-blue;
+$error-background:     #D25151;
+$error-outline:        #E30013;
+$banner-color:         #DE7537;
+$orange-light:         #FFBF99;
+
+$border-color: #d2d2d2;
+$table-border-color: #959390;
+
+// base dimensions
+$default-border-radius: 18px;
+$desktop-max-content-width: 1140px;
+$mobile-min-content-width: 320px;
+$indent: 160px;
+$mobile-content-gutter: 15px;
+$desktop-content-gutter: 20px;
+
+// typography
+$font-size-base: 16px;
+$line-height-base: 1.625; // 26px for 16px base size
+$font-family-base: 'fira-sans', sans-serif;
+$font-family-headers: $font-family-base;
+
+// header
+$header-background-color: $realme-dark-blue;
+$header-border-color: #9ea6ae;
+$header-error-color: $error-background;
+$header-subtle-dropshadow: inset 0px 12px 10px -5px rgba(0,0,0,0.1); // actually inset drop on following elements
+
+// settings panel
+$settings-elements-bg-color: $muted-blue;
+$settings-elements-color: #C5CACE;
+$settings-triggers-dropshadow: "0 0 12px 0 rgba(0, 0, 0, 0.2)";
+$settings-border-color: #8B949D;
+
+// welcome
+$welcome-bg-color: #d9ed96;
+$welcome-bg-color-secondary: #e0f8ff;
+$welcome-desktop-padding-left: 376px;
+$welcome-button-color: #fff;
+$welcome-button-bg-color: $link-color-hover;
+$welcome-button-bg-color-hover: $text-color;
+$welcome-buttons-margin-right: 20px;
+$welcome-desktop-buttons-margin-right: 30px;
+
+// timeline
+$timeline-border-width: 2px;
+$timeline-spacing:      65px;
+$timeline-line-left-mobile: 41px;
+$timeline-line-left-desktop: -407px;
+$timeline-terminator-size: 15px;
+
+// phase
+$phase-background-color:      $accent-color;
+$phase-content-width-desktop: 750px;
+
+// card
+$card-background-color: #eeeded;
+$card-padding:          15px;
+$card-padding-desktop:  30px;
+$card-arrow:            22px;
+$card-arrow-desktop:    30px;
+
+$card-accordion-color:      #dcdcdc;
+$card-accordion-open-color: $link-color;
+
+$non-chronological-accordion-color:        #f5f4f4;
+$non-chronological-accordion-open-color:   $accent-color-light;
+$non-chronological-accordion-border-color: #d2d2d2;
+
+$non-chronological-nested-accordion-color:      #e8e5e5;
+$non-chronological-nested-accordion-open-color: $accent-color-light;
+
+// expandables and checkboxes
+$expandable-larger-font-size:   18px;
+$expandable-larger-line-height: 22px;
+$expandable-larger-height: 54px;
+
+$expandable-smaller-font-size:   16px;
+$expandable-smaller-line-height: 18px;
+$expandable-smaller-height: 42px;
+
+$left-side-curve-width: 40px;
+
+// supplementary information section
+$supplementary-background-color:          #fef4e3;
+$supplementary-header-color:              #fde4bb;
+$supplementary-arrow:                     $card-arrow;
+$supplementary-arrow-desktop:             $card-arrow-desktop;
+$supplementary-accordian-border-color:    #fcc977;
+$supplementary-content-background-color:  #fef9f1;
+
+$supplementary-nested-accordion-color:          #e8e5e5;
+$supplementary-nested-accordion-open-color:     $supplementary-header-color;
+$supplementary-nested-content-background-color: #feefd6;
+
+// form
+$form-input-height: 42px;
+$form-border-color: #9ea6ae;
+$form-lighter-border-color: #d2d2d2;
+$form-error-bg: #fce7e6;
+$form-error-outline: $error-outline;
+$form-warning-bg: #fbebda;
+$form-warning-outline: #e95e20;
+$form-info-bg: #e4f3fd;
+$form-info-outline: #285a9b;
+$form-success-bg: #e0f0ee;
+$form-success-outline: $accent-color-dark;
+$form-teal: #66b4b7;
+$form-teal-dark: #487f80;
+$form-teal-hover: #e0efee;
+$form-informative-background: #f6f5f5;
+$form-disabled-color: #ccc;
+$form-field-border-radius: 5px;
+
+// services and map
+$services-background: #ecf6ca;
+$map-marker-color: #ED9159;
+$map-marker-selected-color: #D25656;
+$provider-text-color: #7B9C35;
+$provider-accent-color: #a0c454;
+$provider-read-more-bg: #f5f4f4;
+
+// support page
+$support-header-background: #f5cd9d;
+$support-content-background: #fef4e3;
+
+// sharing pane
+$facebook-color: #3b5998;
+$twitter-color: #55acee;
+$envelope-color: #a0c454;
+
+// entitlements
+$entitlements-background: $accent-color-light;
+$entitlements-primary: #3E7AB1;
+$entitlements-secondary: #77a5d1;
+$entitlements-tertiary: #e3edf5;
+$entitlements-form-bg: #f1f6fa;
+$entitlements-form: $entitlements-primary;
+$entitlements-accordian: darken($entitlements-tertiary, 3%);
+$entitlements-accordian-border: $entitlements-secondary;
+$entitlements-form-hover: $entitlements-tertiary;
+$entitlements-subheadings: $entitlements-primary;
+
+// footer
+$footer-background-color:     $realme-dark-blue;
+$footer-link-color:           #c5c9ce;
+$footer-link-color-hover:     #ffffff;
+$footer-top-spacing-mobile:   70px;
+$footer-top-spacing-desktop:  100px;
+$footer-curve-height:         15px;
+
+// print styles
+$print-background-color:      #fff;
+$print-text-color:            $text-color;
+$print-border:                1px solid $text-color;
+
+// z-index index
+$z-index-header: 7;
+$z-index-jump-nav-list: 3;
+$z-index-phase-number: 2;
+$z-index-phase-header-content: 1;
+$z-index-settings-trigger: 6;
+$z-index-settings-pane-open: 4;
+$z-index-settings-pane-fixed: 5;
+$z-index-sharing-pane: 3;
+
+// icons
+$icon-facebook:         '\e900';
+$icon-twitter:          '\e901';
+$icon-tick:             '\e902';
+$icon-next:             '\e903';
+$icon-arrow:            '\e904';
+$icon-todo:             '\e905';
+$icon-timeline:         '\e906';
+$icon-accordian-close:  '\e907';
+$icon-accordian-open:   '\e908';
+$icon-external-link:    '\e909';
+$icon-success:          '\e910';
+$icon-save:             '\e911';
+$icon-personalise:      '\e90a';
+$icon-theme-finance:    '\e90b';
+$icon-theme-health:     '\e90c';
+$icon-exclamation:      '\e90d';
+$icon-arrow-right:      '\e90e';
+$icon-arrow-left:       '\e90f';
+$icon-map-pin:          '\e913';
+$icon-list:             '\e912';
+$icon-menu:             '\e914';
+$icon-email:            '\e915';
+$icon-phone:            '\e916';
+$icon-pointer:          '\e917';
+$icon-time:             '\e918';
+$icon-apply-online:     '\e919';
+$icon-appointment:      '\e91a';
+$icon-medical:          '\e91b';
+$icon-down-chevron:     '\e91c';
+$icon-home:             '\e91f';
+$icon-profile:          '\e921';
+$icon-envelope:         '\e920';
+$icon-facebook-f:       '\e925';
+
+// ird branding
+$ird-teal: #0d8390;

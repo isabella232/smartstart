@@ -1,0 +1,108 @@
+@import 'variables';
+
+.birth-registration-page {
+  min-width: 320px;
+}
+
+.birth-registration-page .page-content {
+
+  h2 {
+    position: relative;
+    padding-left: 58px;
+    overflow: hidden;
+
+    @media print {
+      margin: 0 0 15px 0;
+      font-size: 28px;
+    }
+
+    > .step-number {
+      position: absolute;
+      margin: auto;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      font-size: 20px;
+      line-height: 38px;
+      height: 38px;
+      width: 38px;
+      border-radius: 38px;
+      background-color: $form-teal;
+      color: #fff;
+      text-align: center;
+    }
+
+    &.step-heading::before {
+      content: '';
+      border: 1px solid $form-teal;
+      position: absolute;
+      z-index: -1;
+      left: 18px;
+      top: 8px;
+      bottom: 8px;
+    }
+
+    .english {
+      display: inline-block;
+      margin-top: 5px;
+    }
+
+    @media #{$desktop-and-above} {
+      padding-left: 84px;
+
+      > .step-number {
+        width: 64px;
+        height: 64px;
+        font-size: 36px;
+        line-height: 64px;
+      }
+
+      &.step-heading::before {
+        left: 32px;
+        top: 10px;
+        bottom: 10px;
+      }
+    }
+  }
+
+  h4.section-heading {
+    margin-top: 50px;
+  }
+
+  .unavailable-notice {
+    h2 {
+      padding: 0;
+    }
+  }
+
+  .informative-text {
+    background-color: $form-informative-background;
+    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+    &.intro {
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    @media print {
+      font-size: 14px !important;
+      margin: 5px 0 !important;
+      padding: 0 !important;
+    }
+  }
+
+  @media print {
+    font-size: 14px;
+
+    a:after {
+      content: '';
+      width: 5px;
+    }
+
+    .main-nav {
+      display: none;
+    }
+  }
+}

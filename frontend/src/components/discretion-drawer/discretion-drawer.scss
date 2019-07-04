@@ -1,0 +1,27 @@
+@import 'variables';
+
+// reusing styles from  settings-pane
+.settings-trigger.settings-trigger-quick-exit {
+  font-size: $font-size-base;
+  line-height: 1.2;
+  padding: 12px 36px;
+}
+
+.settings-pane-need-help {
+  &.is-open {
+    max-width: 300px;
+  }
+
+  strong, a {
+    font-weight: bold;
+  }
+}
+
+.settings-triggers a {
+  text-decoration: none;
+
+  &::after {
+    font-size: 16px;
+    bottom: 0;
+  }
+}

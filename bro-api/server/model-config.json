@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "BirthRegistrationApplication": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Births": {
+    "dataSource": "db",
+    "public": true
+  },
+  "ReferenceData": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Audit": {
+    "dataSource": "db",
+    "public": false
+  },
+  "ActiveHash": {
+    "dataSource": "db",
+    "public": false
+  }
+}

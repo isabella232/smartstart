@@ -1,0 +1,69 @@
+{
+  "name": "Audit",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "submittedAt": {
+      "type": "date",
+      "required": "true"
+    },
+    "surname": {
+      "type": "string",
+      "required": "true"
+    },
+    "applicationReferenceNumber": {
+      "type": "string"
+    },
+    "eServerSubmittedAt": {
+      "type": "date"
+    },
+    "eServerResponseStatus": {
+      "type": "string"
+    },
+    "localDuplicate": {
+      "type": "boolean"
+    },
+    "eServerDuplicate": {
+      "type": "boolean"
+    },
+    "requestSource": {
+      "type": "string",
+      "required": "true"
+    },
+    "productCode": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "number"
+    },
+    "deliveryName": {
+      "type": "string"
+    },
+    "deliveryAddress": {
+      "type": "object",
+      "postgresql": {
+        "columnName": "deliveryAddress",
+        "dataType": "json"
+      }
+    },
+    "txnAttempted": {
+      "type": "boolean"
+    },
+    "txnReconciled": {
+      "type": "boolean"
+    },
+    "txnSuccess": {
+      "type": "boolean"
+    },
+    "txnMessage": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

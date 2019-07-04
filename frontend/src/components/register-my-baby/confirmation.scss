@@ -1,0 +1,149 @@
+@import 'variables';
+
+.form-confirmation {
+  border-bottom: 1px solid $form-lighter-border-color;
+  padding-bottom: 20px;
+
+  &.retry {
+    margin-top: 30px;
+  }
+
+  // header
+  .step-number::after {
+    font-family: 'icomoon';
+    content: $icon-tick;
+    font-size: 16px;
+
+    @media #{$desktop-and-above} {
+      font-size: 28px;
+    }
+  }
+
+  // messaging - only alter for non-retry status
+  &.non-retry {
+    .success,
+    .info,
+    .warning {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+
+    &::before {
+      top: 15px;
+    }
+
+    h3 { // look like h5
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  }
+
+  // birth certificate order
+  .order-summary {
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    @media #{$desktop-and-above} {
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+
+    .fail-payment {
+      border-top: 2px solid $form-warning-outline;
+      border-bottom: 2px solid $form-warning-outline;
+      background-color: $form-warning-bg;
+      justify-content: flex-end;
+
+      > strong {
+        position: relative;
+        display: block;
+        &::before {
+          font-family: 'icomoon';
+          font-size: 18px;
+          line-height: 18px;
+          position: absolute;
+          left: -25px;
+          top: 3px;
+          content: $icon-exclamation;
+          color: $form-error-outline;
+        }
+      }
+    }
+  }
+
+  // accordion block
+  .expandable-group {
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    @media #{$desktop-and-above} {
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+  }
+
+  // more services block
+  .more-services {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+
+    @media #{$desktop-and-above} {
+      flex-direction: row;
+    }
+
+    img {
+      width: 150px;
+      margin-bottom: 15px;
+      align-self: center;
+
+      @media #{$desktop-and-above} {
+        margin-bottom: 0;
+        margin-right: 20px;
+      }
+    }
+
+    .more-services-content {
+      text-align: center;
+      font-size: 18px;
+      line-height: 26px;
+
+      @media #{$desktop-and-above} {
+        text-align: left;
+        align-self: center;
+      }
+    }
+  }
+
+  // print button area
+  .print {
+    margin-top: 80px;
+
+    @media #{$desktop-and-above} {
+      text-align: right;
+    }
+
+    button {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+
+      @media #{$desktop-and-above} {
+        width: auto;
+      }
+    }
+
+    @media print {
+      display: none;
+    }
+  }
+}

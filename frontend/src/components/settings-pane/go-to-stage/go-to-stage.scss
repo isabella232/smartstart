@@ -1,0 +1,21 @@
+@import 'variables';
+
+.go-to-stage {
+  padding-left: 30px;
+  padding-right: 30px;
+  width: 100%;
+
+  .category-title {
+    font-size: 36px;
+    border-top: 1px solid $text-shade-color;
+    border-bottom: 1px solid $text-shade-color;
+  }
+
+  .nav-item {
+    a {
+      font-size: $font-size-base;
+      text-decoration: none;
+      line-height: 48px;
+    }
+  }
+}

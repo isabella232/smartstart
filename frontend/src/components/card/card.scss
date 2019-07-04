@@ -1,0 +1,68 @@
+@import 'variables';
+
+.card {
+  background-color: $card-background-color;
+  padding: $card-padding;
+  margin-bottom: 60px;
+  position: relative;
+  min-height: 80px;
+  margin-left: $mobile-content-gutter;
+  margin-right: $mobile-content-gutter;
+
+  @media #{$desktop-and-above} {
+    padding: $card-padding-desktop;
+    margin-bottom: 84px;
+
+    max-width: $phase-content-width-desktop;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media print {
+    margin-bottom: 30px;
+    background-color: $print-background-color;
+    margin-left: 0;
+  }
+
+  // curved bottom
+  &::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 60px;
+    background-color: $card-background-color;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    position: absolute;
+    left: 0;
+    bottom: -30px;
+    z-index: -1;
+
+    @media #{$desktop-and-above} {
+      height: 96px;
+      bottom: -48px;
+    }
+
+    @media print {
+      display: none;
+    }
+  }
+
+  h3:first-of-type {
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 15px;
+
+    @media #{$desktop-and-above} {
+      font-size: 32px;
+    }
+
+    .english {
+      font-weight: 500;
+    }
+  }
+
+  *:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -1,0 +1,470 @@
+/*
+ * ONLY BASE PROJECT STYLES SHOULD GO IN HERE
+ * e.g. basic font setup, links etc.
+ *
+ * All other styles should go into individual component subfolders,
+ * and be included via an import statement from the component.
+ *
+ * The variables and mixins files should be included from every .scss file that
+ * has a dependency upon them, as load order beyond this base style
+ * file *cannot be guaranteed*. The variables and mixins files must not
+ * generate any actual CSS, so that this repetition is harmless.
+ *
+ * Utilities like clearfix should be included in this base file.
+ */
+
+// fonts
+@mixin font-face($fontname, $filename: $fontname, $weight: normal, $style: normal) {
+    @font-face {
+        font-family: $fontname;
+        src:url('/assets/fonts/#{$filename}.eot');
+        src:url('/assets/fonts/#{$filename}.eot?#iefix') format('embedded-opentype'),
+            url('/assets/fonts/#{$filename}.woff2') format('woff2'),
+            url('/assets/fonts/#{$filename}.woff') format('woff'),
+            url('/assets/fonts/#{$filename}.ttf') format('truetype');
+        font-weight: $weight;
+        font-style: $style;
+    }
+}
+@include font-face('fira-sans', 'fira-sans-regular');
+@include font-face('fira-sans', 'fira-sans-italic', normal, italic);
+@include font-face('fira-sans', 'fira-sans-500', 500);
+@include font-face('fira-sans', 'fira-sans-700', 700);
+
+@font-face {
+    font-family: icomoon;
+    src:url('/assets/fonts/icomoon.eot?bro');
+    src:url('/assets/fonts/icomoon.eot?bro#iefix') format('embedded-opentype'),
+        url('/assets/fonts/icomoon.woff?bro') format('woff'),
+        url('/assets/fonts/icomoon.ttf?bro') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@import 'variables';
+@import 'mixins';
+@import 'components/form/form';
+// Do NOT include further imports unless the base styles have a direct dependency
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  color: $text-color;
+  background-color: $background-color;
+  padding: 0;
+  margin: 0;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  text-size-adjust: 100%;
+}
+
+.site-container-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  @media print {
+    display: block;
+    height: auto;
+  }
+}
+
+.site-container {
+  flex: 1 0 auto;
+}
+
+h2,
+h3 {
+  font-family: $font-family-headers;
+  line-height: 1.2;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 30px;
+
+  @media #{$desktop-and-above} {
+    font-size: 42px;
+  }
+
+  .english {
+    font-weight: 500;
+  }
+}
+
+h3 {
+  font-weight: bold;
+  font-size: 26px;
+
+  @media #{$desktop-and-above} {
+    font-size: 32px;
+  }
+
+  .english {
+    font-weight: 500;
+  }
+}
+
+h4, h5, h6 {
+  line-height: 1.2;
+  font-weight: 500;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+h4 {
+  font-size: 22px;
+}
+
+h5 {
+  font-size: 18px;
+}
+
+h6 {
+  font-size: 16px;
+}
+
+a {
+  color: $link-color;
+  display: inline-block;
+  position: relative;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: $link-color-hover;
+  }
+
+  &[href*="//"],
+  &.ext-link-icon {
+    padding-right: 0.8em;
+
+    &::after {
+      font-family: 'icomoon' !important;
+      content: $icon-external-link;
+      display: inline-block;
+      font-size: 0.6em;
+      position: relative;
+      width: 0.6em;
+      right: -0.6em;
+      top: -0.05em;
+    }
+
+    @media print {
+      display: inline-flex;
+      flex-wrap: wrap;
+      order: 1;
+      padding-right: 1.2em;
+
+      &::after {
+        order: 2;
+        width: 2.5em;
+        top: 0.6em;
+      }
+
+      &::before {
+        content: " (" attr(href) ")";
+        order: 3;
+      }
+    }
+  }
+}
+
+strong {
+  font-weight: 500;
+}
+
+blockquote {
+  font-style: italic;
+  font-size: 20px;
+  text-align: center;
+  position: relative;
+  padding-top: 35px;
+  padding-bottom: 35px;
+  margin: 45px;
+
+  @media #{$desktop-and-above} {
+    margin: 60px 90px;
+  }
+
+  &::before,
+  &::after {
+    content: '';
+    width: 75px;
+    border-top: 2px solid $text-color;
+    position: absolute;
+    left: calc(50% - (75px / 2));
+  }
+
+  &::before {
+    top: 0;
+  }
+
+  &::after {
+    bottom: 0;
+  }
+}
+
+ul {
+  padding-left: 18px;
+
+  > li {
+    padding-left: 6px;
+    margin-bottom: 5px;
+  }
+
+  // nested
+  > li > ul {
+    list-style-type: circle;
+  }
+
+  p + & {
+    margin-top: -10px; // tighten up spacing between to 6px
+  }
+
+  a {
+    display: inline;
+  }
+}
+
+ol {
+  padding-left: 30px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+::selection {
+  text-shadow: none;
+  background: $accent-color;
+}
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
+
+table {
+  border-collapse: collapse;
+  max-width: 100%;
+
+  th,
+  td {
+    padding: 10px 15px;
+    border-top: 1px solid $table-border-color;
+    border-bottom: 1px solid $table-border-color;
+
+    @media #{$extra-small-devices} {
+      padding: 10px 8px;
+    }
+  }
+
+  // table head style for <th> and first <tr> of tbody
+  th,
+  tr:first-child td {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    font-weight: 500;
+  }
+
+  // remove first <tr> of <tbody> style if there is a <thead> present
+  thead + tbody tr:first-child td {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    font-weight: 400;
+  }
+}
+
+// FORM ELEMENTS
+
+button,
+.button {
+  margin: 0;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  color: $link-color;
+  border: 2px solid $link-color;
+  padding: 6px 20px;
+  border-radius: $default-border-radius;
+  min-width: 180px;
+  font-weight: 500;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  text-align: center;
+
+  &:hover,
+  &:focus {
+    color: $link-color-hover;
+    border-color: $link-color-hover;
+  }
+
+  &:active {
+    color: #fff;
+    background-color: $link-color-hover;
+    border-color: $link-color-hover;
+  }
+
+  &[href*="//"],
+  &.ext-link-icon {
+    padding-right: 20px;
+
+    &::after {
+      position: static;
+      margin-left: 0.6em;
+      width: auto;
+
+      @media print {
+        width: 2.5em;
+        right: 0.6em;
+        position: relative;
+      }
+    }
+  }
+}
+
+label {
+  @extend h5;
+}
+
+input,
+textarea {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  display: inline-block;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  border: 2px solid transparent;
+  border-radius: $form-field-border-radius;
+  padding: 10px 20px;
+  position: relative;
+  left: -2px;
+
+  &:invalid {
+    box-shadow: none;
+
+    &:not(:focus) {
+      border: 2px solid $error-outline;
+    }
+  }
+}
+
+select {
+  font-size: $font-size-base;
+  font-family: $font-family-base;
+  font-weight: 500;
+  color: $text-color;
+  padding: 6px;
+}
+
+[placeholder] {
+  text-overflow: ellipsis;
+}
+
+::placeholder {
+  text-overflow: ellipsis;
+}
+
+.inline-clear-field {
+  border: 0;
+  border-radius: 0 $form-field-border-radius $form-field-border-radius 0;
+  background-color: transparent;
+  padding: 0;
+  min-width: 0;
+  display: block;
+  font-weight: 400;
+  color: $text-color;
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  line-height: 14px;
+
+  &:active {
+    background-color: transparent;
+  }
+
+  &::before {
+    font-family: 'icomoon' !important;
+    content: $icon-accordian-close;
+    font-size: 17px;
+    display: inline-block;
+  }
+
+  @media #{$desktop-and-above} {
+    line-height: 19px;
+  }
+}
+
+// HELPER CLASSES from HTML5 Boilerplate
+
+// Hide visually and from screen readers
+.hidden {
+  display: none !important;
+}
+
+.visuallyhidden {
+  @include visuallyhidden;
+}
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+  @include visuallyhidden-focusable;
+}
+
+// Hide visually and from screen readers, but maintain layout
+.invisible {
+  visibility: hidden;
+}
+
+// Clearfix
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+
+
+// SKIP TO CONTENT LINK
+
+.skip-to-content {
+  display: block;
+  text-align: center;
+}
+
+// loaders
+.baby-names-loader {
+  height: 100vh;
+  background-color: $welcome-bg-color-secondary;
+  overflow: hidden;
+}

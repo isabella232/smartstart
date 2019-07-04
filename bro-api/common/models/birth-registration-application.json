@@ -1,0 +1,73 @@
+{
+  "name": "BirthRegistrationApplication",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "submittedAt": {
+      "type": "date",
+      "required": "true",
+      "description": "Timestamp indicating when the application was submitted"
+    },
+    "body": {
+      "type": "object",
+      "required": "true",
+      "postgresql": {
+        "columnName": "body",
+        "dataType": "json"
+      }
+    },
+    "childFirstNames": {
+      "type": "string",
+      "required": "true",
+      "description": "Dedicated column to facilitate duplicate checks",
+      "maxLength": 75
+    },
+    "childSurname": {
+      "type": "string",
+      "required": "true",
+      "description": "Dedicated column to facilitate duplicate checks",
+      "maxLength": 75
+    },
+    "childBirthDate": {
+      "type": "string",
+      "required": "true",
+      "description": "Dedicated column to facilitate duplicate checks",
+      "maxLength": 10
+    },
+    "applicationReferenceNumber": {
+      "type": "string",
+      "required": "true",
+      "index": "true",
+      "description": "Dedicated column to facilitate lookup of record"
+    },
+    "processed": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, indicates that it has already been sent on to eServer"
+    },
+    "eServerRejected": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, indicates that it's been submitted and eServer has rejected this application"
+    },
+    "confirmUrlSuccess": {
+      "type": "string",
+      "required": "true",
+      "description": "On txn success, redirect here",
+      "maxLength": 300
+    },
+    "confirmUrlFail": {
+      "type": "string",
+      "required": "true",
+      "description": "On txn fail, redirect here",
+      "maxLength": 300
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

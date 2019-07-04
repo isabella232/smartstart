@@ -1,0 +1,262 @@
+@import 'variables';
+
+.baby-names-header {
+  background-color: $welcome-bg-color-secondary;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 45px;
+  box-shadow: inset 0px -45px 0px 0px $welcome-bg-color;
+  min-width: $mobile-min-content-width;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 108px;
+    background: url('/assets/img/baby-names/bushes.svg') no-repeat right bottom;
+    background-size: 300px 64px; // can't use auto for y because of IE11 bug
+    bottom: 20px;
+
+    @media #{$tablet-and-above} {
+      bottom: 10px;
+      background-size: 400px 85px;
+    }
+
+    @media #{$desktop-and-above} {
+      bottom: 0;
+      background-size: 500px 107px;
+    }
+  }
+
+  &::before {
+    display: none;
+    transform: scaleX(-1);
+    left: -100px;
+
+    @media only screen and (min-width: 1350px) {
+      display: block;
+    }
+  }
+
+  &::after {
+    right: -100px;
+  }
+}
+
+.baby-names-header-title {
+  margin: 0;
+  background-size: 500px auto;
+  height: 160px;
+
+  @media #{$tablet-and-above} {
+    background-size: 777px auto;
+    height: 230px;
+  }
+
+  @media #{$desktop-and-above} {
+    background-size: 1200px auto;
+    height: 200px;
+  }
+}
+
+.maori-header {
+  background: url('/assets/img/baby-names/banner-maori.svg') no-repeat center bottom;
+}
+
+.english-header {
+  background: url('/assets/img/baby-names/banner-english.svg') no-repeat center bottom;
+}
+
+.baby-names-toggle {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  margin: 60px auto;
+  height: 100px;
+  padding: 0px;
+  min-width: $mobile-min-content-width;
+  padding-bottom: 20px;
+
+    @media #{$desktop-and-above} {
+      max-width: $phase-content-width-desktop;
+    }
+
+  .selected {
+    border-top: 2px solid $form-border-color;
+
+    @media #{$desktop-and-above} {
+      border-left: 2px solid $form-border-color;
+      border-right: 2px solid $form-border-color;
+    }
+  }
+
+
+  @media print {
+    background: $print-background-color;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    height: 16px;
+    width: 100%;
+    box-shadow: $header-subtle-dropshadow;
+    pointer-events: none;
+
+    @media print {
+      display: none;
+    }
+  }
+
+  &.mobile-menu-shown::after {
+    display: none;
+
+    @media #{$desktop-and-above} {
+      display: block;
+    }
+  }
+
+  button {
+    min-width: auto;
+    border-left: none;
+    border-color: #65717d;
+    border-radius: 0;
+    font-family: $font-family-headers;
+    width: 50%;
+    height: 100%;
+    background-color: transparent;
+    color: $text-color;
+    opacity: 0.6;
+    outline: none;
+
+    line-height: 1.2;
+    font-size: 26px;
+
+    @media #{$desktop-and-above} {
+      font-size: 32px;
+      border-left: 2px solid $link-color;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &.selected,
+    &.selected:hover {
+      background-color: #65717d;
+      color: $background-color;
+      border: none;
+      opacity: 1;
+      position: relative;
+
+      &:after {
+        content: '';
+      	position: absolute;
+      	bottom: 0;
+      	left: 50%;
+      	width: 0;
+      	height: 0;
+      	border: 20px solid transparent;
+      	border-top-color: #65717d;
+      	margin-left: -20px;
+      	margin-bottom: -40px;
+      }
+    }
+  }
+}
+
+.bubble-chart-container-wrapper {
+  padding-bottom: 50px;
+}
+
+.bubble-chart-caption {
+  margin-top: 0;
+}
+
+.bubble-chart-controls-help {
+  margin-bottom: 50px;
+
+  @media #{$desktop-and-above} {
+    margin-bottom: 85px;
+  }
+}
+
+.gender-selection {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap-reverse;
+
+  .bubble-chart-category {
+    margin-top: 10px;
+
+    button {
+      min-width: auto;
+      border-color: $text-color;
+      color: $text-color;
+      background-color: transparent;
+      height: 100%;
+
+      &:first-child {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right-width: 0;
+      }
+
+      &:last-child {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-left-width: 0;
+      }
+
+      &:hover {
+        background-color: rgba($text-color, 0.2);
+      }
+
+      &.selected,
+      &.selected:hover {
+        background-color: $text-color;
+        color: $background-color;
+      }
+    }
+  }
+}
+
+
+.bubble-chart-year {
+  display: inline-block;
+  margin-left: 20px;
+  background-color: white;
+  font-size: 24px;
+  min-width: 90px;
+}
+
+.social-media {
+
+  a {
+    text-decoration: none;
+
+    &::before {
+      display: inline-block;
+      font-family: 'icomoon' !important;
+      font-size: 22px;
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+
+  .twitter::before {
+    content: $icon-twitter;
+  }
+
+  .facebook::before {
+    content: $icon-facebook;
+  }
+}
