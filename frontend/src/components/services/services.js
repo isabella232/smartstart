@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import geolib from 'geolib'
+import { orderByDistance, convertDistance, getDistance } from 'geolib'
 import classNames from 'classnames'
 import { browserHistory } from 'react-router'
 import { StickyContainer, Sticky } from 'react-sticky'
 import scriptLoader from 'react-async-script-loader'
-import { fetchServicesDirectory } from 'actions/services'
+import { fetchServicesDirectory, fetchProviders } from 'actions/services'
 import LocationAutosuggest from 'components/location-autosuggest/location-autosuggest'
 import ResultMap from 'components/services/map'
 import Provider from 'components/services/provider'
@@ -16,36 +16,6 @@ import { stringToFloat } from 'utils'
 import './services.scss'
 
 const RESULTS_LIMIT = 50
-const categories = {
-  'parenting-support': {
-    'label': 'Parenting support',
-    'query': '/api/request/service-locations/parenting-support'
-  },
-  'early-education': {
-    'label': 'Early childhood education',
-    'query': '/api/request/service-locations/early-education'
-  },
-  'breastfeeding': {
-    'label': 'Breastfeeding support',
-    'query': '/api/request/service-locations/breastfeeding'
-  },
-  'antenatal': {
-    'label': 'Antenatal classes',
-    'query': '/api/request/service-locations/antenatal'
-  },
-  'mental-health': {
-    'label': 'Anxiety and depression support',
-    'query': '/api/request/service-locations/mental-health'
-  },
-  'budgeting': {
-    'label': 'Budgeting and financial help',
-    'query': '/api/request/service-locations/budgeting'
-  },
-  'well-child': {
-    'label': 'Well Child/Tamariki Ora providers',
-    'query': '/api/request/service-locations/well-child'
-  }
-}
 
 class Services extends Component {
   constructor (props) {
@@ -59,9 +29,9 @@ class Services extends Component {
       mapCenter: { lat: -41.295378, lng: 174.778684 },
       mapZoom: 5,
       results: [],
-      groupedResults: [],
       loading: false,
-      googleLibAvailable: false
+      googleLibAvailable: false,
+      displayType: ''
     }
 
     this.setLocationFromStore = this.setLocationFromStore.bind(this)
@@ -74,6 +44,8 @@ class Services extends Component {
     this.clickListTab = this.clickListTab.bind(this)
     this.clickMapTab = this.clickMapTab.bind(this)
     this.clearLocation = this.clearLocation.bind(this)
+    this.fetchProviders = this.fetchProviders.bind(this)
+    this.setDisplayType = this.setDisplayType.bind(this)
   }
 
   componentDidMount () {
@@ -83,46 +55,45 @@ class Services extends Component {
       this.setState({ googleLibAvailable: true })
     }
 
-    if (category && categories[category]) {
+    if (category) {
       this.onCategorySelect(category)
-    }
-
-    if (personalisationValues.settings && personalisationValues.settings.loc) {
-      this.setLocationFromStore(personalisationValues.settings)
-    }
-  }
-
-  UNSAFE_componentWillReceiveProps (nextProps) {
-    let hasDirectoryDataChanged = false
-
-    if (nextProps.isScriptLoaded && !this.props.isScriptLoaded) { // script load finished
-      if (nextProps.isScriptLoadSucceed) {
-        this.setState({ googleLibAvailable: true })
-      }
-    }
-
-    hasDirectoryDataChanged = !!(nextProps.directory && nextProps.directory !== this.props.directory)
-    if (hasDirectoryDataChanged) {
-      // this is the earliest that we recieve the data back from the dispatch
-      // we only need to recompute grouping if we switched datasets
-      this.setState({
-        loading: false,
-        groupedResults: this.groupServices(nextProps.directory) // store so no re-grouping when location changes
-      }, () => {
-        this.computeDistances(this.state.groupedResults)
-      })
     }
 
     if (this.state.category === '') {
       this.setState({ loading: false })
     }
 
-    if (nextProps.personalisationValues.settings && nextProps.personalisationValues.settings.loc) {
-      this.setLocationFromStore(nextProps.personalisationValues.settings)
+    if (personalisationValues.settings && personalisationValues.settings.loc) {
+      this.setLocationFromStore(personalisationValues.settings)
     }
+
+    this.props.dispatch(fetchServicesDirectory())
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps, prevState) {
+    if (this.props.isScriptLoaded && !prevProps.isScriptLoaded) { // script load finished
+      if (this.props.isScriptLoadSucceed) {
+        this.setState({ googleLibAvailable: true })
+      }
+    }
+
+    // set default location if it's been updated in user prefs
+    if (this.props.personalisationValues.settings && this.props.personalisationValues.settings.loc) {
+      // compare props
+        if (this.props.personalisationValues.settings.loc !== prevProps.personalisationValues.settings.loc) {
+          this.setLocationFromStore(this.props.personalisationValues.settings)
+        }
+    }
+
+    // display loading spinner if category is set and location has been changed
+    if (this.state.category !== '') {
+      const { latitude, longitude } = this.state.location
+      // compare state
+      if ((latitude !== prevState.location.latitude) && (longitude !== prevState.location.longitude)) {
+        this.setState({ loading: true })
+      }
+    }
+
     // hack to force google maps to redraw because we start with it hidden
     try {
       window.dispatchEvent(new Event('resize'))
@@ -154,10 +125,30 @@ class Services extends Component {
     // only do the dispatch if the category is set, i.e. not '' the blank value
     if (category !== '') {
       this.setState({ loading: true })
-      this.props.dispatch(fetchServicesDirectory(categories[category].query))
-      browserHistory.replace(`/services-near-me/${category}`)
+      this.fetchProviders(category)
+      .then(() => {
+        this.setDisplayType()
+        this.computeDistances()
+        browserHistory.replace(`/services-near-me/${category}`)
+      })
     } else {
       browserHistory.replace(`/services-near-me`)
+    }
+  }
+
+  fetchProviders (category) {
+    return this.props.dispatch(fetchProviders(category))
+  }
+
+  setDisplayType () {
+    let directoryObject
+    if (this.props.directory) {
+      directoryObject = this.props.directory.find( directory => {
+        return (directory.id == this.state.category)
+      })
+      if (directoryObject) {
+        this.setState({ displayType: directoryObject.type })
+      }
     }
   }
 
@@ -170,8 +161,9 @@ class Services extends Component {
           text: locationDetail.formatted_address
         }
       }, () => {
+        this.setDisplayType()
         // we need to re-calculate distances
-        this.computeDistances(this.state.groupedResults)
+        this.computeDistances(this.props.providers)
       })
     }
   }
@@ -237,10 +229,7 @@ class Services extends Component {
     }
   }
 
-  computeDistances (results) {
-    // this is kept separate from the service grouping loop so we can
-    // re-calculate distance without having to re-group services
-
+  computeDistances () {
     const { location } = this.state
 
     if (!location.latitude || !location.longitude) {
@@ -248,36 +237,38 @@ class Services extends Component {
       return
     }
 
-    results = geolib.orderByDistance(location, results)
+    if (this.state.category !== '') {
+      let providerList = this.props.providers
 
-    this.setState({
-      results: results.slice(0, RESULTS_LIMIT)
-    }, () => {
-      this.showOnMap(this.state.location)
-    })
-  }
-
-  groupServices (services) {
-    // this function relies on providers being adjacent in the directory data
-    let providers = []
-    services.forEach((service, index) =>  {
-      // do some setup for computeDistances
-      service.latitude = service.LATITUDE
-      service.longitude = service.LONGITUDE
-
-      // check if it is the same provider as the last service
-      if (index > 1 && service.PROVIDER_NAME === services[index - 1].PROVIDER_NAME) {
-        let last = providers.length - 1
-        if (Array.isArray(providers[last].otherServices)) {
-          providers[last].otherServices.push(service)
-        } else {
-          providers[last].otherServices = [service]
-        }
-      } else {
-        providers.push(service)
+      if (this.state.category === 'primary-schools') {
+        //Correspondence School needs to appear at the bottom of any Primary School search, regardless of lat/long
+        // Pull out Correspondence School from providers list (to be added to result list later)
+        providerList = this.props.providers.filter(provider => !provider.type.startsWith('Correspondence School'))
       }
-    })
-    return providers
+
+      let providersOrderedByDistance = orderByDistance(location, providerList)
+      // add 'distance' to each provider
+      providersOrderedByDistance.forEach( provider => {
+        let distance = getDistance(location, { latitude: provider.latitude, longitude: provider.longitude})
+        provider.distance = convertDistance(distance, 'km')
+      })
+
+      let results = providersOrderedByDistance.slice(0, RESULTS_LIMIT)
+      if (this.state.category === 'primary-schools') {
+        //add correspondenceSchool to end of results list
+        let correspondenceSchool = this.props.providers.find(provider => provider.type.startsWith('Correspondence School'))
+        if (correspondenceSchool) {
+          results = [...results, correspondenceSchool]
+        }
+      }
+
+      this.setState({
+        results: results,
+        loading: false
+      }, () => {
+        this.showOnMap(this.state.location)
+      })
+    }
   }
 
   clickListTab () {
@@ -293,14 +284,14 @@ class Services extends Component {
   }
 
   render () {
-    const { directoryError } = this.props
-    const { category, listView, location, locationText, mapCenter, mapZoom, results, loading, googleLibAvailable } = this.state
+    const { directoryError, directory, providerError } = this.props
+    const { category, listView, location, locationText, mapCenter, mapZoom, results, loading, googleLibAvailable, displayType } = this.state
 
     const loadErrorClasses = classNames(
       'load-error',
-      { 'hidden': !directoryError }
+      { 'hidden': !directoryError || !providerError }
     )
-    const resultsWrapperClasses = classNames({ 'hidden': directoryError })
+    const resultsWrapperClasses = classNames({ 'hidden': directoryError || providerError })
     const resultsClasses = classNames(
       'results',
       { 'hidden': !(category !== '' && location.latitude && location.longitude && results.length && !loading) }
@@ -333,8 +324,8 @@ class Services extends Component {
             </label>
             <select value={category} onChange={this.onCategorySelect} id='services-category-field'>
               <option value=''>Please select a category</option>
-              {Object.keys(categories).map(key => {
-                return (<option value={key} key={key}>{categories[key].label}</option>)
+              {directory.map(category => {
+                return (<option value={category.id} key={category.id}>{category.name}</option>)
               })}
             </select>
           </div>
@@ -362,7 +353,7 @@ class Services extends Component {
 
         <div className={loadErrorClasses}><h3>Unable to load</h3><p>Please try again shortly.</p></div>
         <div className={resultsWrapperClasses}>
-          {loading && location.latitude && location.longitude && <Spinner />}
+          {loading && category && location.latitude && location.longitude && <Spinner />}
 
           <div className={resultsClasses}>
             <h3>Closest results near you</h3>
@@ -375,7 +366,7 @@ class Services extends Component {
             <div className='results-layout'>
               <div className={listViewClasses} data-test='services-list'>
                 {results.length && results.map((provider, index) => {
-                  return <Provider key={'provider' + index} provider={provider} recenterMap={this.changeTabAndShowOnMap} />
+                  return <Provider key={'provider' + index} provider={provider} recenterMap={this.changeTabAndShowOnMap} displayType={displayType} />
                 })}
               </div>
 
@@ -421,10 +412,14 @@ function mapStateToProps (state) {
   } = state
   const {
     directory,
-    directoryError
+    directoryError,
+    providers,
+    providerError
   } = services || {
     directory: [],
-    directoryError: false
+    directoryError: false,
+    providers: [],
+    providerError: false,
   }
   const {
     personalisationValues
@@ -435,6 +430,8 @@ function mapStateToProps (state) {
   return {
     directory,
     directoryError,
+    providers,
+    providerError,
     personalisationValues
   }
 }
@@ -443,6 +440,8 @@ Services.propTypes = {
   dispatch: PropTypes.func.isRequired,
   directory: PropTypes.array.isRequired,
   directoryError: PropTypes.bool.isRequired,
+  providers: PropTypes.array,
+  providerError: PropTypes.bool,
   category: PropTypes.string,
   personalisationValues: PropTypes.object,
   isScriptLoaded: PropTypes.bool,

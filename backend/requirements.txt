@@ -7,7 +7,7 @@ django-two-factor-auth==1.6.2
 psycopg2-binary==2.8.3
 python-dateutil==2.7.5
 pytz==2018.7
-python-memcached==1.59
+pylibmc==1.6.0
 python3-saml==1.4.1
 path.py==11.5.0
 requests==2.20.1

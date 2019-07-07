@@ -3,7 +3,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 require('babel-polyfill') // for Object.assign and Promise on IE11
 require('whatwg-fetch') // fetch polyfill for IE11
 const merge = require('webpack-merge')
@@ -154,8 +154,7 @@ const common = {
       [
         { from: PATHS.src + '/assets', to: 'assets' },
         { from: PATHS.src + '/assets/favicons/browserconfig.xml', to: 'browserconfig.xml' },
-        { from: PATHS.src + '/static-pages', to: 'static-pages' },
-        { from: PATHS.src + '/static-pages/static-page.css', to: 'static-page.css' },
+        { from: PATHS.src + '/static-pages/static-page.css', to: 'static-pages/static-page.css' },
         { from: PATHS.src + '/sitemap.xml', to: 'sitemap.xml' },
         { from: PATHS.src + '/robots.txt', to: 'robots.txt' }
       ],
@@ -167,7 +166,27 @@ const common = {
       stats: {
         children: false
       }
-    })
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'static-pages/error.html',
+      template: 'static-pages/error.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'static-pages/maintenance.html',
+      template: 'static-pages/maintenance.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'static-pages/signup-confirmed.html',
+      template: 'static-pages/signup-confirmed.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'static-pages/unsubscribed.html',
+      template: 'static-pages/unsubscribed.html',
+      inject: false
+    }),
   ],
 
   // set up resolve so don't have to qualify paths with ./ within src

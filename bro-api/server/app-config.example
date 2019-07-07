@@ -3,6 +3,7 @@
 const appConfig = {
   domain: 'https://smartstart.services.govt.nz',
   activeHash: 'hash',
+  cleanupSchedule: '*/30 * * * *',
   pxPayKey: 'keyvalue',
   pxPayUser: 'username',
   pxPayEndpoint: 'https://example.com/',

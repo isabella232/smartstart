@@ -32,6 +32,7 @@ class RequestCache(TimeStampedModel):
         else:
             # Collapse SQL whitespace to reduce URL length as much as possible
             sql = ' '.join(ckan.SQL_QUERIES[self.name].format(**ckan.SQL_SUBST).split())
+            log.debug('CKAN query: %s', sql)
             r = requests.post(settings.CKAN_QUERY_URL, files={'sql': (None, sql)})
 
         try:

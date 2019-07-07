@@ -19,6 +19,11 @@ Session.vim
 # auto-generated tag files
 tags
 
+### Eclipse ###
+.project
+.settings/
+.pydevproject
+
 # Environments
 .env
 .venv

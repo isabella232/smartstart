@@ -28,7 +28,6 @@ admin.site.site_header = 'SmartStart'
 
 router = routers.DefaultRouter()
 router.register(r'users', accounts_views.UserViewSet)
-# router.register(r'profile', accounts_views.ProfileViewSet)
 router.register(r'preferences', accounts_views.PreferenceViewSet)
 router.register(r'emailaddresses', accounts_views.EmailAddressViewSet)
 router.register(r'phase-metadata', timeline_views.PhaseMetadataViewSet)
@@ -42,9 +41,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
     url(r'^api/', include('apps.health.urls')),
-    url(r'^api/request/', include('apps.request_cache.urls', namespace='request_cache')),
+    url(r'^api/', include('apps.services_near_me.urls', namespace='services_near_me')),
     url(r'^accounts/', include('apps.accounts.urls', namespace='accounts')),
-    url(r'^timeline/', include('apps.timeline.urls', namespace='timeline')),
+    url(r'', include('apps.timeline.urls', namespace='timeline')),
     url(r'', include('two_factor.urls', namespace='two_factor')),
     url(r'', include('apps.accounts.urls', namespace='rest_framework')),
 ]

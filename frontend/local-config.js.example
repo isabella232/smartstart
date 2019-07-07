@@ -1,5 +1,5 @@
 var config = {
-  endpoint: 'https://www.govt.nz/BoacAPI/v1/all',   // URL to timeline content API
+  endpoint: '/api/timeline/content/',               // URL to timeline content API
   piwik_instance: '',                               // URL to Piwik
   piwik: null,                                      // Piwik site ID
   google_api_key: '',                               // API key to use for Google Maps/Places

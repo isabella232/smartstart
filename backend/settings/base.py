@@ -169,6 +169,10 @@ LBS_DATASET = '"35de6bf8-b254-4025-89f5-da9eb6adf9a0"'  # Must have "double quot
 TIMELINE_URL = 'https://www.govt.nz/BoacAPI/v1/all'
 TIMELINE_USER_AGENT = requests.utils.default_user_agent()
 
+FAMILY_SERVICES_RESOURCE = '35de6bf8-b254-4025-89f5-da9eb6adf9a0'
+SCHOOLS_RESOURCE = 'bdfe0e4c-1554-4701-a8fe-ba1c8e0cc2ce'
+EARLY_EDUCATION_RESOURCE = '26f44973-b06d-479d-b697-8d7943c97c57'
+
 # ############ END OVERRIDE #############
 
 try:
@@ -183,6 +187,7 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = ['.{}'.format(SITE_DOMAIN)]
 
+CACHE_TTL_SECONDS = int(round(REQUEST_CACHE_TTL.total_seconds()))
 
 # realme bundles settings, must be after local since we need SITE_URL here
 BUNDLES = {

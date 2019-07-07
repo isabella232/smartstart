@@ -73,6 +73,20 @@
     }
   }
 
+  .provider-type {
+    display: flex;
+  }
+
+  .school-description {
+    margin-left: 41px; // width of word 'Type'
+  }
+
+  .ece-description {
+    p {
+      display: inline;
+    }
+  }
+
   .details {
     margin-top: 35px;
 

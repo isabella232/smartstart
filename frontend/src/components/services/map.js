@@ -32,10 +32,10 @@ class ResultMap extends Component {
       {markers && markers.map((marker, index) => {
         return <Marker
             key={index}
-            lat={marker.LATITUDE}
-            lng={marker.LONGITUDE}
-            title={marker.PROVIDER_NAME}
-            id={marker.FSD_ID}
+            lat={marker.latitude}
+            lng={marker.longitude}
+            title={marker.name}
+            id={marker.id}
             showList={showList}
           />
       })}

@@ -1,6 +1,7 @@
 'use strict';
 
 const cron = require('node-cron');
+const appConfig = require('../app-config.js');
 const checkIfActiveInstance = require('../../common/utils/check-if-active-instance.js');
 const scheduledTask = require('../../common/methods/periodic-registrations-cleanup.js');
 
@@ -13,7 +14,7 @@ module.exports = function(app, cb) {
    * for more info.
    */
   process.nextTick(() => {
-    cron.schedule('*/30 * * * *', ()  => {
+    cron.schedule(appConfig.cleanupSchedule, ()  => {
       // similar to the make_live task for the b/e, check if we're the active
       // instance that should be running this task before running it
       checkIfActiveInstance(scheduledTask, app);

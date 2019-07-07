@@ -85,9 +85,9 @@ class Marker extends Component {
 
 Marker.propTypes = {
   title: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  lat: PropTypes.string.isRequired,
-  lng: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  lat: PropTypes.number.isRequired,
+  lng: PropTypes.number.isRequired,
   showList: PropTypes.func.isRequired
 }
 

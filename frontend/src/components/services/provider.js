@@ -22,60 +22,102 @@ class Provider extends Component {
   setLocation (event) {
     event.preventDefault()
     const newLocation = {
-      latitude: parseFloat(this.props.provider.LATITUDE),
-      longitude: parseFloat(this.props.provider.LONGITUDE)
+      latitude: parseFloat(this.props.provider.latitude),
+      longitude: parseFloat(this.props.provider.longitude)
     }
     this.props.recenterMap(newLocation)
   }
 
   render () {
-    const { provider } = this.props
+    const { provider, displayType } = this.props
+
+    let subsidyHours = provider.subsidy_20_hrs ? 'Yes' : 'No'
+
+    const dataTypes = {
+      EARLY_EDUCATION: 'EARLY_EDUCATION',
+      SCHOOLS: 'SCHOOLS'
+    }
+
+    // Primary Schools and ECE have unique display fields and styles
+    // below vairables allow for customization based on category
+    let providerType
+    if (displayType === dataTypes.SCHOOLS ||  displayType === dataTypes.EARLY_EDUCATION) {
+      providerType = <p className="provider-type"><strong>Type:&nbsp;</strong><span>{provider.type}</span></p>
+    }
+
+    let providerHours
+    if (displayType === dataTypes.EARLY_EDUCATION) {
+      providerHours = <p><strong>Offers 20 hours ECE:</strong> { subsidyHours } </p>
+    }
+
+    let providerDescription
+    if (provider.description.toLowerCase() !== 'not applicable') {
+      if (displayType === dataTypes.SCHOOLS) {
+        providerDescription = <div className="school-description"><ReadMore text={provider.description} /></div>
+      } else if (displayType === dataTypes.EARLY_EDUCATION) {
+        providerDescription =
+        <div className="ece-description">
+          <strong>Additional information: </strong>
+          <ReadMore text={provider.description} />
+        </div>
+      } else {
+        providerDescription = <ReadMore text={provider.description} />
+      }
+    }
+
+    let enrolledNumber
+    if (displayType === dataTypes.SCHOOLS || displayType === dataTypes.EARLY_EDUCATION) {
+      enrolledNumber = <p><strong>Number of children enrolled:</strong> {provider.total_enrolled}</p>
+    }
 
     return (
-      <div id={provider.FSD_ID} className='provider'>
+      <div id={provider.id} className='provider' key={provider.id}>
         <div className="provider-hero">
-          <h4>{provider.PROVIDER_NAME}</h4>
-
-          <p className='location'>
-            {provider.PHYSICAL_ADDRESS} ({Number(provider.distance/1000).toFixed(1)} km away) <span aria-hidden='true' className='show-on-map'><a href='#map' onClick={this.setLocation}>show on map</a></span>
-          </p>
+          <h4>{provider.name}</h4>
+          {provider.distance &&
+            <p className='location'>
+              {provider.address} ({Number(provider.distance).toFixed(1)} km away) <span aria-hidden='true' className='show-on-map'><a href='#map' onClick={this.setLocation}>show on map</a></span>
+            </p>
+          }
         </div>
 
-        <ReadMore text={provider.ORGANISATION_PURPOSE} />
+        {providerType}
+        {providerHours}
+        {providerDescription}
+        {enrolledNumber}
 
-        <h5>{this.isServiceIndentical(provider.PROVIDER_NAME, provider.SERVICE_NAME)}</h5>
-        <ReadMore text={provider.SERVICE_DETAIL} />
-
-        {provider.otherServices && provider.otherServices.map(service => {
-          return [
-            <h5>{this.isServiceIndentical(service.PROVIDER_NAME, service.SERVICE_NAME)}</h5>,
-            <ReadMore text={service.SERVICE_DETAIL} />
-          ]
+        {provider.services && provider.services.length > 0 && provider.services.map(service => {
+          return (
+            <div key={`${service.id}`}>
+              <h5>{this.isServiceIndentical(provider.name, service.name)}</h5>
+              <ReadMore key={service.id} text={service.detail} />
+            </div>
+          )
         })}
 
         <div className='details'>
-          {provider.PROVIDER_WEBSITE_1 &&
+          {provider.website &&
             <p className='details-website'>
               <span className='details-title'>Website:</span>
-              <a href={provider.PROVIDER_WEBSITE_1} target='_blank' rel='noopener noreferrer'>{provider.PROVIDER_WEBSITE_1}</a>
+              <a href={provider.website} target='_blank' rel='noopener noreferrer'>{provider.website}</a>
             </p>
           }
-          {provider.PUBLISHED_PHONE_1 &&
+          {provider.phone &&
             <p className='details-phone'>
               <span className='details-title'>Phone:</span>
-              <a href={'tel:' + provider.PUBLISHED_PHONE_1}>{provider.PUBLISHED_PHONE_1}</a>
+              <a href={'tel:' + provider.phone}>{provider.phone}</a>
             </p>
           }
-          {provider.PUBLISHED_CONTACT_EMAIL_1 &&
+          {provider.email &&
             <p className='details-email'>
               <span className='details-title'>Email:</span>
-              <a href={'mailto:' + provider.PUBLISHED_CONTACT_EMAIL_1}>{provider.PUBLISHED_CONTACT_EMAIL_1}</a>
+              <a href={'mailto:' + provider.email}>{provider.email}</a>
             </p>
           }
-          {provider.PROVIDER_CONTACT_AVAILABILITY &&
+          {provider.contact_availability &&
             <p className='details-contact'>
               <span className='details-title'>Opening hours:</span>
-              {nl2br(provider.PROVIDER_CONTACT_AVAILABILITY)}
+              {nl2br(provider.contact_availability)}
             </p>
           }
         </div>
@@ -86,7 +128,8 @@ class Provider extends Component {
 
 Provider.propTypes = {
   provider: PropTypes.object.isRequired,
-  recenterMap: PropTypes.func.isRequired
+  recenterMap: PropTypes.func.isRequired,
+  displayType: PropTypes.string
 }
 
 export default Provider
