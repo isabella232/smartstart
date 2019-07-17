@@ -6,6 +6,7 @@ const titleCase = require('../utils/title-case.js');
 const hashId = require('../utils/hashid.js');
 const log = require('../utils/logger.js').child({ component: 'birthregistration' });
 const formatError = require('../utils/format-error.js');
+const config = require('../../server/app-config');
 
 const generatePaymentURL = require('./shared/generate-payment-url.js');
 
@@ -34,7 +35,8 @@ module.exports = (body, req, options, callback) => {
         responseBody: {},
         auditExtras: {},
         confirmUrlSuccess: body.confirmationUrlSuccess,
-        confirmUrlFail: body.confirmationUrlFailure
+        confirmUrlFail: body.confirmationUrlFailure,
+        confirmationEmailAddress: body.confirmationEmailAddress
       };
 
       // naive check that the submission is well-formed
@@ -195,6 +197,15 @@ module.exports = (body, req, options, callback) => {
       }
 
       return resolve(state);
+    });
+  };
+
+  const transformBody = (state) => {
+    // this function is used to modify a body before it is sent to eServer
+    //  currently we need to strip of confirmation email address only
+    return new Promise((resolve) => {
+      delete state.body.confirmationEmailAddress;
+      resolve(state);
     });
   };
 
@@ -380,34 +391,91 @@ module.exports = (body, req, options, callback) => {
     });
   };
 
+  const sendEmailConfimation = (state) => {
+    // email should be only send on full submission
+    if (state.originalActivity !== 'fullSubmission') {
+      return state;
+    }
+    return new Promise((resolve, reject) => {
+      if (state.responseStatus !== 200) {
+        resolve(state);
+      } else {
+        // if eServer successfully processed registration
+        // we send confirmation email
+        const emailTo = state.confirmationEmailAddress;
+
+        // only send an email if user has provided response url
+        if (emailTo) {
+          app.models.Email.send({
+            to: emailTo,
+            from: config.confirmationEmailSettings.from,
+            replyTo: config.confirmationEmailSettings.replyTo,
+            subject: 'Birth registration submitted',
+            envelope: {
+              from: config.confirmationEmailSettings.bounceTo,
+              to: emailTo
+            },
+            text:
+              `Thank you for completing a birth registration in SmartStart – your reference number is ${state.body.applicationReferenceNumber}.
+If we have any questions about your registration submission we will contact you.
+
+Birth registrations are typically processed within 8 working days.
+If you have requested an IRD number for your child this may take up to 15 days after the birth registration has been completed to be sent to you.
+
+If you want to contact us about your baby's registration you can email bdm.nz@dia.govt.nz or call free on 0800 225 255 (NZ only).
+
+Kind regards,
+The SmartStart team`
+          }, (err, mail) => {
+            if (!err) {
+              state.responseBody.confirmationEmailAddress = state.confirmationEmailAddress;
+              log.info({ emailTo }, 'Email sent successfully');
+              resolve(state);
+            } else {
+              // if failed to send email,
+              // log error and proceed through promise chain
+              log.error(err);
+              return resolve(state);
+            }
+          });
+        } else {
+          // no email defined, just resolve
+          return resolve(state);
+        }
+      }
+    });
+  };
+
   // End of function setup
 
   process.nextTick(() => {
 
     // Resolve all functions via promise chain
     initState()
-    .then(state => initAuditRow(state))
-    .then(state => duplicateCheck(state))
-    .then(state => preventPrematureSubmission(state))
-    .then(state => applicationPost(state))
-    .then(state => getEcommerceTxn(state))
-    .then(state => storeApplication(state))
-    .then(state => updateAuditRow(state))
-    .then(state => {
-      if (state.responseStatus === 400) {
-        let err400 = new Error('Invalid submission');
-        err400.statusCode = 400;
+      .then(state => initAuditRow(state))
+      .then(state => duplicateCheck(state))
+      .then(state => preventPrematureSubmission(state))
+      .then(state => transformBody(state))
+      .then(state => applicationPost(state))
+      .then(state => getEcommerceTxn(state))
+      .then(state => storeApplication(state))
+      .then(state => updateAuditRow(state))
+      .then(state => sendEmailConfimation(state))
+      .then(state => {
+        if (state.responseStatus === 400) {
+          let err400 = new Error('Invalid submission');
+          err400.statusCode = 400;
 
-        // merge errors object with the Error
-        return callback(Object.assign(err400, state.responseBody));
-      }
+          // merge errors object with the Error
+          return callback(Object.assign(err400, state.responseBody));
+        }
 
-      return callback(null, state.responseBody);
-    })
-    .catch(error => {
-      log.error(formatError(error));
-      return callback(error);
-    });
+        return callback(null, state.responseBody);
+      })
+      .catch(error => {
+        log.error(formatError(error));
+        return callback(error);
+      });
 
   });
 };

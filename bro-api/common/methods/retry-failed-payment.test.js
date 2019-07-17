@@ -69,7 +69,15 @@ jest.mock('../utils/fetch-retry', () => {
 // setup logging mock
 jest.mock('../utils/logger', () => {
   return {
-    error: () => { return null; }
+    error: () => { return null; },
+    child: (attr) => {
+      return {
+        error: () => { return null; },
+        info: () => { return null; },
+        warn: () => { return null; },
+        debug: () => { return null; }
+      };
+    }
   };
 });
 

@@ -16,7 +16,11 @@ import renderStep6Review from './step6'
 import renderStep7Review from './step7'
 import renderTextarea from 'components/form/fields/render-textarea'
 import renderCheckbox from 'components/form/fields/render-checkbox'
+import renderRadioGroup from 'components/form/fields/render-radio-group'
+import renderField from 'components/form/fields/render-field'
 import renderError from 'components/form/fields/render-error'
+import { yesNo as yesNoOptions } from '../../options'
+import { required, email } from '../../validate'
 import {
   REQUIRE_DECLARATION
 } from '../../validation-messages'
@@ -41,21 +45,42 @@ class Review extends Component {
   }
 
   componentDidMount() {
-    // validate form only when we have data in it
-    // it happens only when we navigating to review from other tab
-    // but not when we loading app on a review page (e.g. refresh and load saved state)
-    if (Object.keys(this.props.formState).length > 0) {
+    if (this.props.initialized) {
       this.props.handleSubmit(this.onValidate)();
     }
   }
 
   componentDidUpdate(prevProps) {
     // revalidate form when we receive data from the backend
-
-    // we need to initialize the form because it might be automatically populated
-    // with a saved data from the user
-    if (Object.keys(prevProps.formState).length === 0 && Object.keys(this.props.formState).length > 0) {
+    if (!prevProps.initialized && this.props.initialized) {
       this.props.handleSubmit(this.onValidate)();
+    }
+
+    if (this.props.onSubmitFail) {
+      this.focusOnFirstError()
+    }
+  }
+
+  // most review fields don't have input fields
+  // and require users to click edit button to navigate
+  // that's why we had to use this solution
+  focusOnFirstError() {
+    // const fieldErrorNode = document.querySelector('.review-field .error, .review-subfield .error, .general-error')
+
+    // scroll if form has field errors
+    const fieldErrorNode = document.querySelector('.review-field .error, .review-subfield .error')
+    if (fieldErrorNode) {
+      const reviewFieldNode = get(fieldErrorNode, 'parentNode.parentNode')
+
+      if (reviewFieldNode) {
+        reviewFieldNode.scrollIntoView({ behavior: 'smooth', 'inline': 'nearest' })
+      }
+    } else {
+      // scroll if form has generic errors
+      const genericErrorNode = document.querySelector('.generic-error')
+      if (genericErrorNode) {
+        genericErrorNode.scrollIntoView({ behavior: 'smooth', 'inline': 'nearest' })
+      }
     }
   }
 
@@ -124,33 +149,59 @@ class Review extends Component {
         <h2 className="step-heading">
           <span className="visuallyhidden">Step</span>
           <span className="step-number">{MYIR_ENABLED ? 8 : 7}</span>
-          Arotake <br/>
+          Arotake <br />
           <span className="english">Review</span>
         </h2>
         <div className="instruction">
           Before you send the baby's details in to us for registration, take a minute to check that all the details you've put in are correct.
         </div>
         <div className="informative-text intro">
-          Clicking the 'Register this birth' button at the bottom of this page will send the information through to the Registry of Births, Deaths and Marriages for registration.<br/><br/>
+          Clicking the 'Register this birth' button at the bottom of this page will send the information through to the Registry of Births, Deaths and Marriages for registration.<br /><br />
           Check the information you're sending carefully. The Registry may make enquiries to be sure that the details provided are correct, and you may have to provide further information.
         </div>
-        { (this.state.validating || submitting || isRedirecting) ?
-          <Spinner text="Checking your application ..."/> :
+        {(this.state.validating || submitting || isRedirecting) ?
+          <Spinner text="Checking your application ..." /> :
           <form onSubmit={handleSubmit(this.onSubmit)}>
-            { (error || genericError) &&
+            {(error || genericError) &&
               <div className="general-error">
-                { renderError({ meta: { touched: true, error: error || genericError }}) }
+                {renderError({ meta: { touched: true, error: error || genericError } })}
               </div>
             }
 
-            { renderStep1Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit }) }
-            { renderStep2Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit }) }
-            { renderStep3Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit }) }
-            { renderStep4Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit }) }
-            { renderStep5Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit }) }
-            { MYIR_ENABLED && renderStep6Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit }) }
-            { renderStep7Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit, countries}) }
+            {renderStep1Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit })}
+            {renderStep2Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit })}
+            {renderStep3Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit })}
+            {renderStep4Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit })}
+            {renderStep5Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit })}
+            {MYIR_ENABLED && renderStep6Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit })}
+            {renderStep7Review({ formState, submitErrors, warnings: syncWarnings, onEdit: onFieldEdit, countries })}
 
+
+            <div>
+              <Field
+                name="confirmationEmail"
+                type="text"
+                label="Do you want to be emailed a confirmation of your birth registration submission?"
+                component={renderRadioGroup}
+                validate={[required]}
+                options={yesNoOptions}
+              />
+            </div>
+
+            {formState.confirmationEmail === 'yes' && (
+              <div className="conditional-field">
+                <div className="instruction-text">
+                  Please provide an email address we can send the confirmation to.
+                </div>
+                <Field
+                  name="confirmationEmailAddress"
+                  type="text"
+                  label="Email"
+                  validate={[required, email]}
+                  component={renderField}
+                />
+              </div>
+            )}
             <Field
               name="declarationMade"
               label={declarationText}
@@ -165,9 +216,9 @@ class Review extends Component {
               normalize={maxLength(600)}
             />
 
-            { error &&
+            {error &&
               <div className="general-error">
-                { renderError({ meta: { touched: true, error }}) }
+                {renderError({ meta: { touched: true, error } })}
               </div>
             }
 

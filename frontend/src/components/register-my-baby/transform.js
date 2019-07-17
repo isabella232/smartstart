@@ -77,7 +77,7 @@ export const FRONTEND_FIELD_TO_SERVER_FIELD = {
 }
 
 export const FRONTEND_FIELD_TO_SERVER_FIELD_TRANSFORM = {
-  'child.stillBorn':  frontendValue => frontendValue !== 'yes'
+  'child.stillBorn': frontendValue => frontendValue !== 'yes'
 }
 
 export const SERVER_FIELD_TO_FRONTEND_FIELD = invert(FRONTEND_FIELD_TO_SERVER_FIELD)
@@ -294,6 +294,7 @@ const cleanup = data => {
   unset(data, 'orderBirthCertificate')
 
   unset(data, 'myir')
+  unset(data, 'confirmationEmail')
 }
 
 const transformBestStart = data => {
@@ -349,7 +350,7 @@ const transformBestStart = data => {
     set(data, 'bestStart.primaryCareGiver.email', email)
 
     // Seperate out the postcode from the line2 field and save as a seperate field
-    if(postCodeIndex > -1) {
+    if (postCodeIndex > -1) {
       let postCode = town.slice(postCodeIndex, postCodeIndex + 4)
       let newTown = town.replace(postCode, '').trim()
       set(data, 'bestStart.primaryCareGiver.homeAddress.postCode', postCode)
@@ -361,12 +362,12 @@ const transformBestStart = data => {
   }
 
   // Update type father to type otherParent
-  if(pcg.type === 'father') {
+  if (pcg.type === 'father') {
     set(data, 'bestStart.primaryCareGiver.type', 'otherParent')
   }
 
   //Update tax resident field if follow up questions all equal yes
-  if(taxResident === 'no' && (childResident === 'yes' || (livedInNZ === 'yes' && taxResidentWhenBS === 'yes'))) {
+  if (taxResident === 'no' && (childResident === 'yes' || (livedInNZ === 'yes' && taxResidentWhenBS === 'yes'))) {
     set(data, 'bestStart.primaryCareGiver.isTaxResident', 'yes')
     unset(data, 'bestStart.primaryCareGiver.hasLivedInNZForTwelveMonths')
     unset(data, 'bestStart.primaryCareGiver.taxResidentWhenBestStartStarts')
@@ -385,17 +386,17 @@ const transformBestStart = data => {
   update(data, 'bestStart.expectedDueDate', formatDate)
 
   //Convert bank account to string
-  if(bankAccountNumber) {
+  if (bankAccountNumber) {
     set(data, 'bestStart.primaryCareGiver.bankAccount.number', formatBankAccount(bankAccountNumber))
   }
 
   //Remove unneeded fields
-  if(get(data, 'bestStart.wanted') === 'N') {
+  if (get(data, 'bestStart.wanted') === 'N') {
     unset(data, 'bestStart.primaryCareGiver')
     unset(data, 'bestStart.expectedDueDate')
   }
 
-  if(get(data, 'bestStart.wanted') === 'I') {
+  if (get(data, 'bestStart.wanted') === 'I') {
     unset(data, 'bestStart.primaryCareGiver.firstNames')
     unset(data, 'bestStart.primaryCareGiver.surname')
     unset(data, 'bestStart.primaryCareGiver.daytimePhone')
@@ -414,8 +415,8 @@ const transformBestStart = data => {
     unset(data, 'bestStart.primaryCareGiver.declarationAccepted')
   }
 
-  if(get(data, 'bestStart.wanted') === 'Y') {
-    if(pcg.type === 'other') {
+  if (get(data, 'bestStart.wanted') === 'Y') {
+    if (pcg.type === 'other') {
       unset(data, 'bestStart.primaryCareGiver.hasPartner')
       unset(data, 'bestStart.primaryCareGiver.partner')
       unset(data, 'bestStart.primaryCareGiver.isApplyingForPaidParentalLeave')
@@ -430,7 +431,7 @@ const transformBestStart = data => {
       unset(data, 'bestStart.primaryCareGiver.declarationAccepted')
     } else {
 
-      if(msdClient === 'yes') {
+      if (msdClient === 'yes') {
         unset(data, 'bestStart.primaryCareGiver.hasPartner')
         unset(data, 'bestStart.primaryCareGiver.partner')
         unset(data, 'bestStart.primaryCareGiver.isApplyingForPaidParentalLeave')
@@ -444,7 +445,7 @@ const transformBestStart = data => {
         unset(data, 'bestStart.primaryCareGiver.declarationAccepted')
       }
 
-      if(wfftc === 'yes') {
+      if (wfftc === 'yes') {
         unset(data, 'bestStart.primaryCareGiver.hasPartner')
         unset(data, 'bestStart.primaryCareGiver.partner')
         unset(data, 'bestStart.primaryCareGiver.isNewZealandResident')
@@ -453,26 +454,26 @@ const transformBestStart = data => {
       }
 
       //Remove care sharer details
-      if(sharingCare === 'no') {
+      if (sharingCare === 'no') {
         unset(data, 'bestStart.primaryCareGiver.careSharer')
       }
 
       //Remove partner details
-      if(hasPartner === 'no') {
+      if (hasPartner === 'no') {
         unset(data, 'bestStart.primaryCareGiver.partner')
       }
     }
   }
 
   //Remove ird info if not needed
-  if(get(data, 'ird.applyForNumber') === false) {
+  if (get(data, 'ird.applyForNumber') === false) {
     unset(data, 'ird.deliveryAddress')
     unset(data, 'ird.numberByEmail')
     unset(data, 'ird.taxCreditIRDNumber')
   }
 
   //Remove msd info if not needed
-  if(get(data, 'msd.notify') === false) {
+  if (get(data, 'msd.notify') === false) {
     unset(data, 'msd.mothersClientNumber')
     unset(data, 'msd.fathersClientNumber')
   }

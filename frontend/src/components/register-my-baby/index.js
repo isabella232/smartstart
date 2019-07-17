@@ -258,6 +258,7 @@ class RegisterMyBabyForm extends Component {
           return rememberBroData({
             confirmationData: {
               applicationReferenceNumber: result.response.applicationReferenceNumber,
+              confirmationEmailAddress: result.response.confirmationEmailAddress,
               stillBorn,
               productCode,
               quantity,
@@ -279,6 +280,7 @@ class RegisterMyBabyForm extends Component {
       return rememberBroData({
         confirmationData: {
           applicationReferenceNumber: result.response.applicationReferenceNumber,
+          confirmationEmailAddress: result.response.confirmationEmailAddress,
           stillBorn: get(submittedData, 'child.stillBorn'),
           bestStart: get(submittedData, 'bestStart.wanted'),
           myIR: {
@@ -317,13 +319,16 @@ class RegisterMyBabyForm extends Component {
     const { step, isReviewing, isRedirecting, animationClass = '' } = this.state
     const {
         birthFacilities, countries, checkingMyIRAvailability,
-        fetchingBirthFacilities, fetchingCountries, fetchingSavedUserData
+        fetchingBirthFacilities, fetchingCountries, fetchingSavedUserData,
+        isScriptLoaded
     } = this.props
 
     const searchParams = new URLSearchParams(this.props.location.search)
     const autoFocusField = searchParams.get('focus')
 
-    if (fetchingBirthFacilities || fetchingCountries || fetchingSavedUserData || checkingMyIRAvailability) {
+    const isFetchingData = fetchingBirthFacilities || fetchingCountries || fetchingSavedUserData
+
+    if (isFetchingData || checkingMyIRAvailability || !isScriptLoaded) {
       return <Spinner text="Please wait ..."/>
     }
 

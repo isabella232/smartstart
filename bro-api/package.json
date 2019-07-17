@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "export NODE_ENV=development && node .",
-    "debug": "export NODE_ENV=development && nodemon  --inspect .",
+    "debug": "export NODE_ENV=development && /root/.node_modules/.bin/nodemon  --inspect .",
     "service": "export NODE_ENV=production && node .",
     "security": "nsp check",
     "initdb": "node ./bin/init-db.js",
@@ -44,7 +44,7 @@
     "yargs": "^8.0.1"
   },
   "devDependencies": {
-    "eslint": "^3.17.1",
+    "eslint": "^3.19.0",
     "eslint-config-loopback": "^8.0.0",
     "jest": "^20.0.4",
     "jest-fetch-mock": "^1.1.1",

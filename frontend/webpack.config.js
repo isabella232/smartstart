@@ -127,13 +127,12 @@ const common = {
       {
         test: /\.js[x]?$/,
         exclude: /node_modules/,
-        use: [ {
+        use: [{
           loader: 'babel-loader',
           options: {
             presets: ['@babel/react']
           }
-        }
-      ]
+        }]
       },
       {
         test: /\.scss$/,

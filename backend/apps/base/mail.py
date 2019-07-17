@@ -10,7 +10,7 @@ def build_email_message(subject, text_message, recipient_list, html_message=None
     To support the Return-Path email address, we have to build
     the email message in a unusual way:
 
-    - use RETURN_PATH_EMAIL as from_email
+    - use BOUNCE_TO_EMAIL as from_email
     - use DEFAULT_FROM_EMAIL as From in header
 
     For more details, refer to:
@@ -21,7 +21,7 @@ def build_email_message(subject, text_message, recipient_list, html_message=None
     mail = EmailMultiAlternatives(
         subject=subject,
         body=text_message,
-        from_email=settings.RETURN_PATH_EMAIL,  # NOTE: this is unusual
+        from_email=settings.BOUNCE_TO_EMAIL,  # NOTE: this is unusual
         to=recipient_list,
         headers={'From': settings.DEFAULT_FROM_EMAIL},  # NOTE: this is unusual
         reply_to=[settings.REPLY_TO_EMAIL])
@@ -38,7 +38,7 @@ def ses_send_mail(subject, text_message, recipient_list, html_message=None):
 
     1. from_email: display in `From` field
     2. reply_to_email: when user clicks reply
-    3. return_path_email: if email was bounced, where should ESP return it to.
+    3. bounce_to_email: if email was bounced, where should ESP return it to.
 
     Those 3 addresses can be all different.
 

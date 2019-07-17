@@ -71,6 +71,7 @@ jest.mock('../utils/fetch-retry', () => {
 jest.mock('../utils/logger', () => {
   return {
     error: () => { return null; },
+    debug: () => { return null; },
     child: (attr) => {
       return {
         error: () => { return null; },
@@ -189,6 +190,20 @@ describe('/Births/birth-registrations endpoint', () => {
             'method': 'POST'
           }
         );
+        done();
+      };
+
+      postBirthRegistrations(body, mockRequest, mockOptions, callback);
+    });
+
+    test('removes confirmation address from request body', done => {
+      let body = {
+        activity: 'fullSubmission',
+        confirmationEmailAddress: 'email@a'
+      };
+      let callback = (error, response) => {
+        expect(body).not.toHaveProperty('confirmationEmailAddress');
+        expect(fetch).toHaveBeenCalledTimes(1);
         done();
       };
 

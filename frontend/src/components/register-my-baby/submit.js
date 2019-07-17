@@ -63,7 +63,7 @@ const toReduxFormSubmissionError = (json) => {
     }
   } else if (statusCode > 400 && statusCode < 500) {
     set(consumableError, '_error', 'An unexpected error has occurred.')
-  } else if (statusCode >= 500 ){
+  } else if (statusCode >= 500) {
     set(consumableError, '_connection_error', 'An unexpected error has occurred.')
   }
 

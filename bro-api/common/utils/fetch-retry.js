@@ -14,6 +14,7 @@
 //    'retries' (optional) - times the request will be retried (default 2)
 //    'retryDelay' (optional) - milliseconds to wait before retry (default 500)
 const fetch = require('node-fetch');
+const log = require('./logger.js').child({ component: 'fetch-retry' });
 
 module.exports = function fetchRetry(url, options) {
   const retries = options ? options.retries || 2 : 2;
@@ -31,6 +32,7 @@ module.exports = function fetchRetry(url, options) {
             let error = new Error(response.statusText);
             error.statusCode = response.status;
             error.message = response.statusText + ' - ' + url;
+            error.url = url;
 
             throw error;
           }
@@ -40,6 +42,7 @@ module.exports = function fetchRetry(url, options) {
             retryCount = retryCount + 1;
             setTimeout(request, retryDelay);
           } else {
+            log.error(err, 'Max retries exceeded');
             reject(err);
           }
         });

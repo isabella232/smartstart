@@ -198,8 +198,11 @@ export class Confirmation extends Component {
           { bsNotification }
           { myirNotification }
         </div>
-
       }
+
+      {confirmationData.confirmationEmailAddress && (
+        <p className="informative-text">A confirmation email has been sent to <strong>{confirmationData.confirmationEmailAddress}</strong></p>
+      )}
 
       <div className="informative-text">
         Your reference number is: <strong>{applicationReferenceNumber}</strong>

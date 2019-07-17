@@ -9,6 +9,7 @@
 // Arguments:
 // 'response' (required) - the fetch HTTP response
 //
+const log = require('./logger.js').child({ component: 'check-status' });
 module.exports = function checkStatus(response) {
   if ((response.status >= 200 && response.status < 300) || response.status == 400) {
     return response;
@@ -16,6 +17,7 @@ module.exports = function checkStatus(response) {
     let error = new Error(response.statusText);
     error.statusCode = response.status;
     error.message = response.statusText;
+    log.error(error, 'Request failed');
 
     throw error;
   }

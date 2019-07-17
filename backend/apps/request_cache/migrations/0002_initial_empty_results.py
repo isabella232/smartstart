@@ -1,14 +1,24 @@
 # -*- coding: utf-8 -*-
 from django.db import models, migrations
 from django.core.management import call_command
-from apps.request_cache.ckan import SQL_QUERIES
+
+
+LBS_CATEGORIES = [
+    'lbs_parenting_support',
+    'lbs_early_education',
+    'lbs_breastfeeding',
+    'lbs_antenatal',
+    'lbs_mental_health',
+    'lbs_budgeting',
+    'lbs_well_child'
+]
 
 
 def commit_data(apps, schema_editor):
     RequestCache = apps.get_model('request_cache', 'RequestCache')
 
     # CKAN Location-Based Services SQL queries
-    for name in SQL_QUERIES:
+    for name in LBS_CATEGORIES:
         (r, created) = RequestCache.objects.get_or_create(name=name)
         if created:
             r.result = {}

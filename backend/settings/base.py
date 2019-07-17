@@ -126,7 +126,7 @@ EMAIL_HOST_PASSWORD = 'aws-email-user-password'
 DEFAULT_FROM_EMAIL = 'from-email'
 
 REPLY_TO_EMAIL = 'reply-to-email'
-RETURN_PATH_EMAIL = 'return-path-email'
+BOUNCE_TO_EMAIL = 'return-path-email'
 
 # Smartstart relies on the PostgreSQL JSON field type, and no longer works with SQLite.
 DATABASES = {

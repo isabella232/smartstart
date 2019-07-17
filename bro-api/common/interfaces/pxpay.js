@@ -7,6 +7,7 @@ const checkStatus = require('../utils/check-status.js');
 
 const builder = new xml2js.Builder();
 const parser = new xml2js.Parser();
+const log = require('../utils/logger.js').child({ component: 'pxpay' });
 
 module.exports = (request) => {
   return fetch(
@@ -27,6 +28,7 @@ module.exports = (request) => {
       return new Promise((resolve, reject) => {
         parser.parseString(xml, (error, result) => {
           if (error) {
+            log.error(error, 'Error parsing xml');
             let err500 = new Error('Unexpected error');
             err500.statusCode = 500;
             err500.stack = err500.stack + ' ' + error + ' ' + xml;

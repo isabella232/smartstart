@@ -15,6 +15,7 @@ import getFieldProps from 'components/form/get-field-props'
 import Accordion from 'components/form/accordion'
 import Spinner from 'components/spinner/spinner'
 import Warning from 'components/form/fields/render-warning'
+import { piwikTrackPost } from 'actions/application'
 import validate from './validation'
 import { INVALID_MESSAGE_MYIR_RESERVE } from '../validation-messages'
 import { asyncValidate } from './validation/step6'
@@ -100,6 +101,22 @@ const BS_NO_CLIENT_MESSAGE = (
   </div>
 )
 
+const myIRStatuses = {
+  detailsStatus: {
+    VALID: 'valid',
+    INVALID: 'invalid',
+    HAS_LOGON: 'has-logon'
+  },
+  username: {
+    AVAILABLE: 'available',
+    NOT_AVAILABLE: 'not-available'
+  },
+  reserve: {
+    RESERVED: 'reserved',
+    NOT_RESERVED: 'not-reserved'
+  }
+}
+
 class MyIRForm extends Component {
   constructor(props) {
     super(props)
@@ -116,32 +133,63 @@ class MyIRForm extends Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (isEmpty(this.props.broForm) && !isEmpty(nextProps.broForm)) {
-      this.formDidInitialize(nextProps)
+  componentDidUpdate(prevProps) {
+    const { myIRWanted, detailsConsent, detailsStatus, usernameStatus, reserveStatus } = this.props
+    if (isEmpty(prevProps.broForm) && !isEmpty(this.props.broForm)) {
+      this.formDidInitialize();
     }
 
-    if (this.props.detailsConsent !== nextProps.detailsConsent) {
-      const { firstNames, lastName, irdNumber, dateOfBirth, detailsConsent } = nextProps
-      if (detailsConsent === 'yes') {
-        this.props.validatePcgDetails({
-          'first-name': firstNames,
-          'last-name': lastName,
-          'ir-number': irdNumber,
-          'date-of-birth': dateOfBirth
-        })
+    if (myIRWanted && prevProps.myIRWanted !== myIRWanted) {
+      this.trackAction('wanted', myIRWanted);
+    }
+
+    if (detailsConsent && prevProps.detailsConsent !== detailsConsent) {
+      this.onDetailsConsentUpdate()
+      this.trackAction('detailsConsent', detailsConsent);
+    }
+
+    if (detailsStatus && prevProps.detailsStatus !== detailsStatus && detailsStatus !== 'loading') {
+      this.trackAction('detailsStatus', this.props.detailsStatus);
+    }
+
+    if (usernameStatus && prevProps.usernameStatus !== usernameStatus) {
+      if (usernameStatus === myIRStatuses.username.AVAILABLE) {
+        this.trackAction('usernameStatus', myIRStatuses.username.AVAILABLE);
       } else {
-        this.props.resetField('myir.detailsStatus')
-        this.props.resetField('myir.username')
-        this.props.resetField('myir.usernameStatus')
-        this.props.resetField('myir.reserveStatus')
+        this.trackAction('usernameStatus', myIRStatuses.username.NOT_AVAILABLE);
+      }
+    }
+
+    if (reserveStatus && prevProps.reserveStatus !== reserveStatus) {
+      if (reserveStatus === myIRStatuses.reserve.RESERVED) {
+        this.trackAction('reserveStatus', myIRStatuses.reserve.RESERVED);
+      } else {
+        this.trackAction('reserveStatus', myIRStatuses.reserve.NOT_RESERVED);
       }
     }
   }
 
-  formDidInitialize(props = this.props) {
-    this.setPcgDetails(props)
-    this.setClientType(props)
+  onDetailsConsentUpdate() {
+    const { firstNames, lastName, irdNumber, dateOfBirth, detailsConsent } = this.props
+
+    if (detailsConsent === 'yes') {
+      this.props.validatePcgDetails({
+        'first-name': firstNames,
+        'last-name': lastName,
+        'ir-number': irdNumber,
+        'date-of-birth': dateOfBirth
+      })
+    } else {
+      this.props.resetField('myir.detailsStatus')
+      this.props.resetField('myir.username')
+      this.props.resetField('myir.usernameStatus')
+      this.props.resetField('myir.reserveStatus')
+    }
+  }
+
+  formDidInitialize() {
+    this.setPcgDetails(this.props)
+    this.setClientType(this.props)
     this.props.checkMyIRAvailability()
   }
 
@@ -155,8 +203,7 @@ class MyIRForm extends Component {
                         isEligible &&
                         pcg.type !== 'unknown' && pcg.type !== 'other' &&
                         pcg.isMSDClient !== 'yes' && pcg.isGettingWorkingForFamilies !== 'yes'
-    const hasLogon = get(props, 'myir.detailsStatus') === 'has-logon'
-
+    const hasLogon = get(props, 'myir.detailsStatus') === myIRStatuses.detailsStatus.HAS_LOGON
 
     let clientType
 
@@ -243,7 +290,12 @@ class MyIRForm extends Component {
   validateOnSubmit(values) {
     const myir = get(values, 'myir') || {}
 
-    if (myir.available && myir.wanted === 'yes' && myir.detailsConsent === 'yes' && myir.usernameStatus === 'available' && myir.reserveStatus !== 'reserved') {
+    if (
+      myir.available && myir.wanted === 'yes'
+      && myir.detailsConsent === 'yes' &&
+      myir.usernameStatus === myIRStatuses.username.AVAILABLE &&
+      myir.reserveStatus !== myIRStatuses.reserve.RESERVED
+    ) {
       const error = set({}, 'myir.reserveStatus', INVALID_MESSAGE_MYIR_RESERVE)
       throw new SubmissionError(error)
     } else {
@@ -300,6 +352,40 @@ class MyIRForm extends Component {
     )
   }
 
+  trackAction(activity, value) {
+    let piwikEvent = {
+      category: 'myIR reservation',
+    }
+
+    switch(activity) {
+      case 'wanted':
+        piwikEvent.action = 'Sign up for myIR',
+        piwikEvent.name = `Sign up for myIR - ${value}`
+        break;
+      case 'detailsConsent':
+        piwikEvent.action = 'Consent to check IRD no',
+        piwikEvent.name = `Consent to check IRD no - ${value}`
+        break;
+      case 'detailsStatus':
+        piwikEvent.action = 'Check IRD details';
+        piwikEvent.name = `Check IRD details: ${value}`
+        break;
+      case 'usernameStatus':
+        piwikEvent.action = 'Check username availability'
+        piwikEvent.name = `Check username available: ${value}`
+        break;
+      case 'reserveStatus':
+        piwikEvent.action = 'Reserve myIR username'
+        piwikEvent.name = `Reserve myIR username: ${value}`
+        break;
+      default:
+    }
+
+    if (piwikEvent.action && piwikEvent.name) {
+      this.props.piwikTrackPost('myIR reservation', piwikEvent)
+    }
+  }
+
   render() {
     const { available, clientType, myIRWanted, detailsStatus, detailsConsent, username, usernameStatus,
       reserveStatus, notifyByText, termsLink, handleSubmit, submitting } = this.props
@@ -330,7 +416,6 @@ class MyIRForm extends Component {
               { clientType === MYIR_STATES.BESTSTART_NO && BS_NO_CLIENT_MESSAGE }
             </div>
           }
-
 
           { available && clientType === 'new' && reserveStatus !== 'reserved' &&
             <div>
@@ -399,7 +484,7 @@ class MyIRForm extends Component {
                 </div>
 
                 <div className="first-conditional">
-                  {(usernameStatus === 'available') &&
+                  {(usernameStatus === myIRStatuses.username.AVAILABLE) &&
 
                     <div className="first-conditional">
                       {/************** MYIR USERNAME RESERVATION SECTION ***************************/}
@@ -501,7 +586,8 @@ MyIRForm = connect(
     validatePcgDetails,
     submitMyIRReservation,
     changeField,
-    resetField
+    resetField,
+    piwikTrackPost
   }
 )(MyIRForm)
 

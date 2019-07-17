@@ -29,9 +29,10 @@ let bootOptions = {
   bootScripts: []
 };
 
-// only add the periodic tasks scheduler if we ran server.js directly
+// only add the custom-boot scripts if we ran server.js directly
 if (require.main === module)  {
   bootOptions.bootScripts.push(path.join(__dirname, './custom-boot/periodic.js'));
+  bootOptions.bootScripts.push(path.join(__dirname, './custom-boot/my-ir-routes.js'));
 }
 
 // Bootstrap the application, configure models, datasources and middleware.

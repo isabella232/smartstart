@@ -32,5 +32,8 @@
   "ActiveHash": {
     "dataSource": "db",
     "public": false
+  },
+  "Email": {
+    "dataSource": "email"
   }
 }
