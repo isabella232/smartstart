@@ -10,9 +10,9 @@
 // }
 export default [
   {
-    startDate: Date.UTC(2019, 5, 24, 22, 0, 0), // 25th June 10:00am
-    expiryDate: Date.UTC(2019, 5, 30, 2, 0, 0), // 30th June 2:00pm
-    message: 'The Birth Registration service will be unavailable between 10:00pm Saturday 29th June and 2:00pm Sunday 30th June due to planned system maintenance. We apologise for any inconvenience this may cause.',
+    startDate: Date.UTC(2019, 6, 23, 22, 0, 0), // 24th July 10:00am
+    expiryDate: Date.UTC(2019, 6, 28, 2, 0, 0), // 28th July 2:00pm
+    message: 'The Birth Registration Service will be unavailable between 10:00 pm Saturday 27th July and 2:00 pm Sunday 28th July due to planned system maintenance. We apologise for any inconvenience this may cause.',
     pages: ['main', 'bro']
   },
   {
