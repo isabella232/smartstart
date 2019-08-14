@@ -406,6 +406,7 @@ module.exports = (body, req, options, callback) => {
 
         // only send an email if user has provided response url
         if (emailTo) {
+          var applicationReferenceNumber = state.body.applicationReferenceNumber;
           app.models.Email.send({
             to: emailTo,
             from: config.confirmationEmailSettings.from,
@@ -416,24 +417,25 @@ module.exports = (body, req, options, callback) => {
               to: emailTo
             },
             text:
-              `Thank you for completing a birth registration in SmartStart – your reference number is ${state.body.applicationReferenceNumber}.
+              `Thank you for completing a birth registration in SmartStart – your reference number is ${applicationReferenceNumber}.
 If we have any questions about your registration submission we will contact you.
 
 Birth registrations are typically processed within 8 working days.
 If you have requested an IRD number for your child this may take up to 15 days after the birth registration has been completed to be sent to you.
 
-If you want to contact us about your baby's registration you can email bdm.nz@dia.govt.nz or call free on 0800 225 255 (NZ only).
+If you want to contact us about your baby's registration you can email bdm.nz@dia.govt.nz or call free on 0800 225 252 (NZ only).
 
 Kind regards,
 The SmartStart team`
           }, (err, mail) => {
             if (!err) {
               state.responseBody.confirmationEmailAddress = state.confirmationEmailAddress;
-              log.info({ emailTo }, 'Email sent successfully');
+              log.info({ emailTo, applicationReferenceNumber }, 'Email sent successfully');
               resolve(state);
             } else {
               // if failed to send email,
               // log error and proceed through promise chain
+              err.applicationReferenceNumber = applicationReferenceNumber;
               log.error(err);
               return resolve(state);
             }
